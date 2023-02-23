@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5rvk4b1eap8e"]
+
+[ext_resource type="Script" path="res://server.gd" id="1_gdnrl"]
+
+[node name="server" type="Node2D"]
+script = ExtResource("1_gdnrl")
+
+[node name="connect_button" type="Button" parent="."]
+offset_left = 537.0
+offset_top = 2.0
+offset_right = 690.0
+offset_bottom = 56.0
+text = "CONNECT"
+
+[node name="host_buttom" type="Button" parent="."]
+offset_left = 292.0
+offset_top = 1.0
+offset_right = 445.0
+offset_bottom = 55.0
+text = "HOST"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://player.tscn")
+spawn_path = NodePath("../entities")
+
+[node name="entities" type="Node2D" parent="."]
+
+[connection signal="pressed" from="connect_button" to="." method="_connect_pressed"]
+[connection signal="pressed" from="host_buttom" to="." method="_host_buttom_pressed"]
