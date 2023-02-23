@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://byhvmdmdd00x0"]
+[gd_scene load_steps=8 format=3 uid="uid://byhvmdmdd00x0"]
 
 [ext_resource type="Texture2D" uid="uid://crhlwaqfsf55b" path="res://icon.svg" id="1_kps7a"]
 [ext_resource type="Script" path="res://player_input.gd" id="2_h7h16"]
 [ext_resource type="Script" path="res://player.gd" id="2_lf1v6"]
+[ext_resource type="Script" path="res://player/controller.gd" id="4_m2nk6"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yu6in"]
 properties/0/path = NodePath(".:position")
@@ -17,9 +18,9 @@ properties/0/path = NodePath(".:direction")
 properties/0/spawn = false
 properties/0/sync = true
 
-[node name="player" type="Sprite2D"]
-position = Vector2(689, 339)
-texture = ExtResource("1_kps7a")
+[sub_resource type="SphereShape3D" id="SphereShape3D_65g03"]
+
+[node name="player" type="CharacterBody3D"]
 script = ExtResource("2_lf1v6")
 
 [node name="sync" type="MultiplayerSynchronizer" parent="."]
@@ -29,3 +30,14 @@ replication_config = SubResource("SceneReplicationConfig_yu6in")
 root_path = NodePath(".")
 replication_config = SubResource("SceneReplicationConfig_ias7w")
 script = ExtResource("2_h7h16")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_65g03")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.754573, 0, 0, 0, 0.754573, 0, 0, 0, 0.754573, 0, 0, 0)
+billboard = 1
+texture = ExtResource("1_kps7a")
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("4_m2nk6")

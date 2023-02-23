@@ -68,14 +68,14 @@ func _exit_tree():
 	multiplayer.peer_disconnected.disconnect(del_player)
 
 func add_player(id: int):
-	var character = preload("res://player.tscn").instantiate()
+	var player = preload("res://player.tscn").instantiate()
 	# Set player id.
-	character.player = id
-	# Randomize character position.
-	var pos := Vector2.from_angle(randf() * 2 * PI)
-	character.position = Vector2()
-	character.name = str(id)
-	$entities.add_child(character, true)
+	player.id = id
+	# Randomize player position.
+#	var pos := Vector2.from_angle(randf() * 2 * PI)
+#	player.position = Vector2()
+	player.name = str(id)
+	$entities.add_child(player, true)
 
 func del_player(id: int):
 	if not $entities.has_node(str(id)):
