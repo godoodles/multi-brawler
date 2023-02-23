@@ -60,6 +60,8 @@ func _host_buttom_pressed():
 	# Spawn the local player unless this is a dedicated server export.
 	if not OS.has_feature("dedicated_server"):
 		add_player(1)
+		
+	$mob_button.disabled = false
 
 func _exit_tree():
 	if not multiplayer.is_server():
@@ -71,9 +73,9 @@ func add_player(id: int):
 	var player = preload("res://player.tscn").instantiate()
 	# Set player id.
 	player.id = id
+
 	# Randomize player position.
-#	var pos := Vector2.from_angle(randf() * 2 * PI)
-#	player.position = Vector2()
+	player.position = Vector3(randf_range(-5, 5), 0.0, randf_range(-5, 5))
 	player.name = str(id)
 	$entities.add_child(player, true)
 
@@ -81,3 +83,9 @@ func del_player(id: int):
 	if not $entities.has_node(str(id)):
 		return
 	$entities.get_node(str(id)).queue_free()
+
+func _mob_button_pressed():
+	var mob = preload("res://mobs/kevin.tscn").instantiate()
+	mob.position = Vector3(randf_range(-10, 10), 0.0, randf_range(-10, 10))
+	mob.target = $entities.get_child(0)
+	$entities.add_child(mob, true)

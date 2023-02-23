@@ -18,9 +18,9 @@ var last_direction := Vector2()
 	set(value):
 		id = value
 		# Give authority over the player input to the appropriate peer.
-		$player_input.set_multiplayer_authority(value)
+		$Controller/PlayerInput.set_multiplayer_authority(id)
 
-@onready var input = $player_input
+@onready var input = $Controller/PlayerInput
 
 var velocity_h: Vector2:
 	get:
