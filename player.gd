@@ -59,6 +59,7 @@ func _ready() -> void:
 	equip_attack(load("res://player/ability_attack_slash.gd").new())
 	equip_attack(load("res://player/ability_attack_slash.gd").new())
 	
+	set_ability_special(load("res://player/ability_special_explosion.gd").new())
 	set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
 #	set_ability_dodge(load("res://player/ability_dodge_jump.gd").new())
 
@@ -93,8 +94,8 @@ func _physics_process(delta):
 			controller.dodge.consume()
 		
 		if ability_special and ability_special.allow_use() and controller.special.since_pressd() < 0.2:
-			activate_ability(ability_dodge)
-			controller.ability_special.consume()
+			activate_ability(ability_special)
+			controller.special.consume()
 		
 		process_movement(delta)
 	

@@ -28,6 +28,8 @@ func _attack() -> bool: return false
 func _find_closest_mob() -> void:
 	closest_mob = null
 	distance_to_closest_mob = 99999.0
+	# Choosing a random direction so not every attack targets the same enemy
+	# it could instead work like brotato where the weapons are rotating, or something more original
 	var direction = Vector2.RIGHT.rotated(randf() * TAU)
 	for mob in get_tree().get_nodes_in_group("mobs"):
 		var distance = player.position.distance_to(mob.position)
