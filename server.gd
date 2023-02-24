@@ -7,6 +7,8 @@ var port = 4433 if OS.get_environment("GODOT_PORT").is_empty() else int(OS.get_e
 var delta_sum := 0.0
 
 func _ready():
+	print(Version.checksum)
+	
 	get_tree().paused = false
 	# You can save bandwidth by disabling server relay and peer notifications.
 	multiplayer.server_relay = false
@@ -69,6 +71,7 @@ func _exit_tree():
 	multiplayer.peer_disconnected.disconnect(del_player)
 
 func add_player(id: int):
+	prints("new peer", id)
 	var player = preload("res://player.tscn").instantiate()
 	# Set player id.
 	player.id = id
