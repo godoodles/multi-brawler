@@ -1,13 +1,13 @@
 extends AbilityAttack
 
 func _ready() -> void:
-	active_duration = 0.2
-	cooldown_duration = 1.0
-
-func _on_start() -> void:
-	# Hit enemies
-	pass
+	reload_duration = 0.1
 
 func _process_active(delta: float) -> void:
-	# Player walks at half the speed during this attack
-	player.process_movement(delta, player.movement_speed * 0.5)
+	pass
+
+func _attack():
+	if closest_mob and distance_to_closest_mob < range:
+		closest_mob.hit(self, damage)
+		return true
+	return false

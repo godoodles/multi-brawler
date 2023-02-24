@@ -1,8 +1,13 @@
+class_name Player
 extends CharacterBody3D
 
 @onready var controller: Controller = $Controller
+@onready var body = %Body
+@onready var hands = %Hands
+@onready var legs = %Legs
+@onready var head = %Head
 
-var ability_attack
+var attacks := []
 var ability_dodge
 var ability_special
 
@@ -22,6 +27,19 @@ var last_direction := Vector2()
 
 @onready var input = $Controller/PlayerInput
 
+var position_h: Vector2:
+	get:
+		return Vector2(position.x, position.z)
+	set(value):
+		position.x = value.x
+		position.z = value.y
+
+var position_v: float:
+	get:
+		return position.y
+	set(value):
+		position.y = value
+
 var velocity_h: Vector2:
 	get:
 		return Vector2(velocity.x, velocity.z)
@@ -36,39 +54,40 @@ var velocity_v: float:
 		velocity.y = value
 
 func _ready() -> void:
-	set_ability_dodge(load("res://player/ability_attack_slash.gd").new())
-	set_ability_attack(load("res://player/ability_dodge_dash.gd").new())
-#	set_ability_attack(load("res://player/ability_dodge_jump.gd").new())
+	equip_attack(load("res://player/ability_attack_slash.gd").new())
+	equip_attack(load("res://player/ability_attack_slash.gd").new())
+	equip_attack(load("res://player/ability_attack_slash.gd").new())
+	equip_attack(load("res://player/ability_attack_slash.gd").new())
+	
+	set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
+#	set_ability_dodge(load("res://player/ability_dodge_jump.gd").new())
 
-func set_ability_attack(ability):
-	ability_attack = ability
-	ability_attack.player = self
+func equip_attack(attack):
+	attacks.push_back(attack)
+	attack.player = self
+	hands.add_child(attack)
 
 func set_ability_dodge(ability):
 	ability_dodge = ability
 	ability_dodge.player = self
+	legs.add_child(ability)
 
 func set_ability_special(ability):
 	ability_special = ability
 	ability_special.player = self
+	head.add_child(ability)
 
 func _physics_process(delta):
 	var controller_direction = controller.get_direction()
 	if controller_direction != Vector2.ZERO:
 		last_direction = controller_direction
 	
-	if ability_attack: ability_attack.process(delta)
-	if ability_dodge: ability_dodge.process(delta)
-	if ability_special: ability_special.process(delta)
-	
 	if active_ability:
 		active_ability.process_active(delta)
 	else:
 		# Using "since_pressed()" so abilities will activate if you press them a bit before another ability is finished
-		if ability_attack and ability_attack.allow_use() and controller.attack.since_pressd() < 0.4:
-			activate_ability(ability_attack)
-			controller.attack.consume()
-		
+		for attack in attacks:
+			attack.process_active(delta)
 		if ability_dodge and ability_dodge.allow_use() and controller.dodge.since_pressd() < 0.2:
 			activate_ability(ability_dodge)
 			controller.dodge.consume()

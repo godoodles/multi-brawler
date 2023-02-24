@@ -8,6 +8,13 @@ size = Vector3(20, 1, 20)
 [node name="server" type="Node2D"]
 script = ExtResource("1_gdnrl")
 
+[node name="host_buttom" type="Button" parent="."]
+offset_left = 292.0
+offset_top = 1.0
+offset_right = 445.0
+offset_bottom = 55.0
+text = "HOST"
+
 [node name="connect_button" type="Button" parent="."]
 offset_left = 537.0
 offset_top = 2.0
@@ -23,12 +30,13 @@ offset_bottom = 53.0
 disabled = true
 text = "MOB"
 
-[node name="host_buttom" type="Button" parent="."]
-offset_left = 292.0
-offset_top = 1.0
-offset_right = 445.0
-offset_bottom = 55.0
-text = "HOST"
+[node name="mob_100_button" type="Button" parent="."]
+offset_left = 952.0
+offset_top = -1.0
+offset_right = 1105.0
+offset_bottom = 53.0
+disabled = true
+text = "MOB x100"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn", "res://mobs/kevin.tscn")
@@ -50,6 +58,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.90735e-06, 30.3611)
 current = true
 fov = 20.0
 
+[connection signal="pressed" from="host_buttom" to="." method="_host_buttom_pressed"]
 [connection signal="pressed" from="connect_button" to="." method="_connect_pressed"]
 [connection signal="pressed" from="mob_button" to="." method="_mob_button_pressed"]
-[connection signal="pressed" from="host_buttom" to="." method="_host_buttom_pressed"]
+[connection signal="pressed" from="mob_100_button" to="." method="_on_mob_100_button_pressed"]

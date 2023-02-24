@@ -1,7 +1,7 @@
 class_name Ability
-extends Node
+extends Node3D
 
-var player
+var player: Player
 
 var active_duration := 0.3
 var cooldown_duration := 0.5
@@ -25,9 +25,6 @@ func complete() -> void:
 	_on_complete()
 func _on_complete():
 	pass
-
-func process(delta):
-	cooldown_t -= delta
 
 func process_active(delta: float) -> void:
 	_process_active(delta)

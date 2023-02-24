@@ -62,6 +62,7 @@ func _host_buttom_pressed():
 		add_player(1)
 		
 	$mob_button.disabled = false
+	$mob_100_button.disabled = false
 
 func _exit_tree():
 	if not multiplayer.is_server():
@@ -85,6 +86,13 @@ func del_player(id: int):
 	$entities.get_node(str(id)).queue_free()
 
 func _mob_button_pressed():
+	spawn_mob()
+
+func _on_mob_100_button_pressed() -> void:
+	for i in 100:
+		spawn_mob()
+
+func spawn_mob():
 	var mob = preload("res://mobs/kevin.tscn").instantiate()
 	mob.position = Vector3(randf_range(-10, 10), 0.0, randf_range(-10, 10))
 	mob.target = $entities.get_child(0)

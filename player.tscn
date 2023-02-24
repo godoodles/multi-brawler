@@ -20,10 +20,10 @@ properties/0/path = NodePath(".:direction")
 properties/0/spawn = false
 properties/0/sync = true
 
-[node name="player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D"]
 script = ExtResource("2_lf1v6")
 
-[node name="sync" type="MultiplayerSynchronizer" parent="."]
+[node name="Sync" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_yu6in")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -42,16 +42,20 @@ root_path = NodePath(".")
 replication_config = SubResource("SceneReplicationConfig_ias7w")
 script = ExtResource("2_h7h16")
 
-[node name="slot" type="Node3D" parent="."]
+[node name="Slot" type="Node3D" parent="."]
 
-[node name="body" type="Marker3D" parent="slot"]
+[node name="Body" type="Marker3D" parent="Slot"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.235658, 0, 0.523462)
 
-[node name="hands" type="Marker3D" parent="slot"]
+[node name="Hands" type="Marker3D" parent="Slot"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.235658, 0, 0.523462)
 
-[node name="legs" type="Marker3D" parent="slot"]
+[node name="Legs" type="Marker3D" parent="Slot"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.235658, 0, 0.523462)
 
-[node name="head" type="Marker3D" parent="slot"]
+[node name="Head" type="Marker3D" parent="Slot"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.235658, 0, 0.523462)
