@@ -1,9 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://bkvj76lhtncfd"]
+[gd_scene load_steps=7 format=3 uid="uid://bkvj76lhtncfd"]
 
 [ext_resource type="Script" path="res://server.gd" id="1_gdnrl"]
+[ext_resource type="Texture2D" uid="uid://b85loe2eskeao" path="res://environment/floor_checker.png" id="2_py3o8"]
+[ext_resource type="Script" path="res://camera.gd" id="3_ol1tw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l8rhb"]
-size = Vector3(20, 1, 20)
+size = Vector3(40, 1, 40)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f8i6w"]
+albedo_color = Color(0.14902, 0.180392, 0.227451, 1)
+albedo_texture = ExtResource("2_py3o8")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_tr8ct"]
+size = Vector3(40, 1, 40)
 
 [node name="server" type="Node2D"]
 script = ExtResource("1_gdnrl")
@@ -45,18 +56,26 @@ spawn_path = NodePath("../entities")
 [node name="entities" type="Node2D" parent="."]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_l8rhb")
 
-[node name="CameraPivot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.701121, 0.713042, 0, -0.713042, 0.701121, 0, 0, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+material_override = SubResource("StandardMaterial3D_f8i6w")
+mesh = SubResource("BoxMesh_tr8ct")
 
-[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.90735e-06, 30.3611)
+[node name="Camera" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.701121, 0.713042, 0, -0.713042, 0.701121, 0, 0, 0)
+script = ExtResource("3_ol1tw")
+
+[node name="Camera3D" type="Camera3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.90735e-06, 40.1836)
 current = true
-fov = 20.0
+fov = 15.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 3.85936, 0)
 
 [connection signal="pressed" from="host_buttom" to="." method="_host_buttom_pressed"]
 [connection signal="pressed" from="connect_button" to="." method="_connect_pressed"]

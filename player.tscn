@@ -20,7 +20,7 @@ properties/0/path = NodePath(".:direction")
 properties/0/spawn = false
 properties/0/sync = true
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" groups=["players"]]
 script = ExtResource("2_lf1v6")
 
 [node name="Sync" type="MultiplayerSynchronizer" parent="."]
