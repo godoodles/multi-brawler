@@ -1,22 +1,21 @@
 # multiplayer.gd
 extends Node
 
-const PORT = 4433
+var server := "127.0.0.1"
+var port = 4433 if OS.get_environment("GODOT_PORT").is_empty() else int(OS.get_environment("GODOT_PORT"))
 
 var delta_sum := 0.0
 
 func _ready():
-	# Start paused.
 	get_tree().paused = false
 	# You can save bandwidth by disabling server relay and peer notifications.
 	multiplayer.server_relay = false
 	
 	set_process(false)
 
-	# Automatically start the server in headless mode.
-	#if DisplayServer.get_name() == "headless":
-	#	print("Automatically starting dedicated server.")
-	#	_on_host_pressed.call_deferred()
+	if DisplayServer.get_name() == "headless":
+		print("Starting dedicated server...")
+		_host_buttom_pressed()
 
 func start_game():
 	get_tree().paused = false
@@ -24,12 +23,11 @@ func start_game():
 
 func _connect_pressed():
 	# Start as client.
-	var txt : String = "127.0.0.1"
-	if txt == "":
+	if server == "":
 		OS.alert("Need a remote to connect to.")
 		return
 	var peer = ENetMultiplayerPeer.new()
-	peer.create_client(txt, PORT)
+	peer.create_client(server, port)
 	if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
 		OS.alert("Failed to start multiplayer client.")
 		return
@@ -39,7 +37,7 @@ func _connect_pressed():
 func _host_buttom_pressed():
 	# Start as server.
 	var peer = ENetMultiplayerPeer.new()
-	peer.create_server(PORT)
+	peer.create_server(port)
 	if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
 		OS.alert("Failed to start multiplayer server.")
 		return
@@ -58,7 +56,7 @@ func _host_buttom_pressed():
 		add_player(id)
 
 	# Spawn the local player unless this is a dedicated server export.
-	if not OS.has_feature("dedicated_server"):
+	if not DisplayServer.get_name() == "headless":
 		add_player(1)
 		
 	$mob_button.disabled = false
