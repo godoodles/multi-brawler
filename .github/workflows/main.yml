@@ -1,4 +1,4 @@
-name: hello-world
+name: main
 on: push
 jobs:
   build:
@@ -39,3 +39,4 @@ jobs:
         with:
           age: '0 seconds'
           skip-recent: 5
+     
