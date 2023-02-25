@@ -35,6 +35,7 @@ jobs:
           .ci/deploy.bash
   
       - name: Clean
+        permissions: write-all
         uses: c-hive/gha-remove-artifacts@v1
         with:
           age: '0 seconds'
