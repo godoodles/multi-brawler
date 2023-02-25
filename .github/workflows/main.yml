@@ -12,12 +12,15 @@ jobs:
           path: .cache
           key: ${{ runner.os }}-cache
       - name: Build
-        run: .ci/build.bash build-game linux
+        run: |
+          .ci/build.bash build-game linux
+          .ci/build.bash build-game windows
       - name: Publish
         uses: actions/upload-artifact@v3
         with:
           name: ${{ runner.os }}
           path: .artifact/*
+
       - name: Deploy
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -30,8 +33,11 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/private.key
           .ci/deploy.bash
-      - name: Clean
-        uses: c-hive/gha-remove-artifacts@v1
+  
+  job: Clean
+    runs-on: ubuntu-latest
+    steps:
+      - uses: c-hive/gha-remove-artifacts@v1
         with:
           age: '0 seconds'
           skip-recent: 5
