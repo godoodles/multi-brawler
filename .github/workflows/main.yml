@@ -15,7 +15,6 @@ jobs:
       - name: Build
         run: |
           .ci/build.bash build-game linux
-          .ci/build.bash build-game windows
       - name: Publish
         uses: actions/upload-artifact@v3
         with:
