@@ -20,7 +20,7 @@ jobs:
           path: .artifact/*
       - name: Deploy
         env:
-          SUPER_SECRET: ${{ secrets.SSH_KEY }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_KEY" > ~/.ssh/private.key
