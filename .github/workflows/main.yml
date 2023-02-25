@@ -34,10 +34,8 @@ jobs:
           ssh-add ~/.ssh/private.key
           .ci/deploy.bash
   
-  job: Clean
-    runs-on: ubuntu-latest
-    steps:
-      - uses: c-hive/gha-remove-artifacts@v1
+      - name: Clean
+        uses: c-hive/gha-remove-artifacts@v1
         with:
           age: '0 seconds'
           skip-recent: 5
