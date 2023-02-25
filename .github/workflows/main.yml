@@ -1,1 +1,42 @@
+name: main
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: .cache
+          key: ${{ runner.os }}-cache
+      - name: Build
+        run: |
+          .ci/build.bash build-game linux
+      - name: Publish
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ runner.os }}
+          path: .artifact/*
 
+      - name: Deploy
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          echo "$SSH_KEY" > ~/.ssh/private.key
+          chmod 400 ~/.ssh/private.key
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/private.key
+          .ci/deploy.bash
+  
+      - name: Clean
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '0 seconds'
+          skip-recent: 5
+     
