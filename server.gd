@@ -1,7 +1,7 @@
 # multiplayer.gd
 extends Node
 
-var server := "20.81.125.206"
+var server := "127.0.0.1" #20.81.125.206
 var port = 4433 if OS.get_environment("GODOT_PORT").is_empty() else int(OS.get_environment("GODOT_PORT"))
 
 var delta_sum := 0.0
