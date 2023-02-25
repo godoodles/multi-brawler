@@ -1,0 +1,18 @@
+name: hello-world
+on: workflow_dispatch 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: .cache
+          key: ${{ runner.os }}-cache
+      - name: build
+        run: .ci/build.bash build-game linux
+      - name: Publish build
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ runner.os }}
+          path: .artifact/*
