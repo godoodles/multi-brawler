@@ -3,6 +3,7 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,7 +36,6 @@ jobs:
           .ci/deploy.bash
   
       - name: Clean
-        permissions: write-all
         uses: c-hive/gha-remove-artifacts@v1
         with:
           age: '0 seconds'
