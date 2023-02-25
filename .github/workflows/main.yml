@@ -21,8 +21,10 @@ jobs:
       - name: Deploy
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
         run: |
           mkdir -p ~/.ssh/
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           echo "$SSH_KEY" > ~/.ssh/private.key
           chmod 400 ~/.ssh/private.key
           eval "$(ssh-agent -s)"
