@@ -50,7 +50,7 @@ then
         platform_ext=".x86_64"
     fi
 
-    docker_run godot-build-env "cd /src && sh .ci/version.sh > version.gd && cd / && mkdir -p /build/ins&& godot --headless --path /src --export-release ${platform} /tmp/brawler && godot --headless --path /src --export-release ${platform} /build/install/brawler${platform_ext} && ${platform_command}" game-${platform} 
+    docker_run godot-build-env "cd /src && sh .ci/version.sh > version.gd && cd / && mkdir -p /build/install && godot --headless --path /src --export-release ${platform} /build/install/brawler${platform_ext} && ${platform_command}" game-${platform} 
 fi
 
 exit $?
