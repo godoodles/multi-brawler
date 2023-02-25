@@ -24,6 +24,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_KEY" > ~/.ssh/private.key
+          chmod 400 ~/.ssh/private.key
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/private.key
           .ci/deploy.bash
