@@ -30,3 +30,8 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/private.key
           .ci/deploy.bash
+      - name: Clean
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '0 seconds'
+          skip-recent: 5
