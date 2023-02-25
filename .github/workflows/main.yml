@@ -13,8 +13,17 @@ jobs:
           key: ${{ runner.os }}-cache
       - name: Build
         run: .ci/build.bash build-game linux
-      - name: Publish build
+      - name: Publish
         uses: actions/upload-artifact@v3
         with:
           name: ${{ runner.os }}
           path: .artifact/*
+      - name: Deploy
+        env:
+          SUPER_SECRET: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/private.key
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/private.key
+          .ci/deploy.bash
