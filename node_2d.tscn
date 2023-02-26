@@ -38,7 +38,6 @@ offset_left = 765.0
 offset_top = -1.0
 offset_right = 918.0
 offset_bottom = 53.0
-disabled = true
 text = "MOB"
 
 [node name="mob_100_button" type="Button" parent="."]
@@ -46,7 +45,6 @@ offset_left = 952.0
 offset_top = -1.0
 offset_right = 1105.0
 offset_bottom = 53.0
-disabled = true
 text = "MOB x100"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]

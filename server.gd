@@ -60,9 +60,6 @@ func _host_buttom_pressed():
 	# Spawn the local player unless this is a dedicated server export.
 	if not DisplayServer.get_name() == "headless":
 		add_player(1)
-		
-	$mob_button.disabled = false
-	$mob_100_button.disabled = false
 
 func _exit_tree():
 	if not multiplayer.is_server():
@@ -87,12 +84,13 @@ func del_player(id: int):
 	$entities.get_node(str(id)).queue_free()
 
 func _mob_button_pressed():
-	spawn_mob()
+	spawn_mob.rpc_id(1)
 
 func _on_mob_100_button_pressed() -> void:
 	for i in 100:
-		spawn_mob()
+		spawn_mob.rpc_id(1)
 
+@rpc("any_peer", "call_local")
 func spawn_mob():
 	var mob = preload("res://mobs/kevin.tscn").instantiate()
 	mob.position = Vector3(randf_range(-10, 10), 0.0, randf_range(-10, 10))

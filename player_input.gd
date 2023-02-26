@@ -9,7 +9,6 @@ extends MultiplayerSynchronizer
 
 func _ready():
 	# Only process for the local player.
-	prints(get_parent().name, get_multiplayer_authority(), multiplayer.get_unique_id())
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 
 
