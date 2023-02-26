@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbqwbnet4xgqi"]
+
+[ext_resource type="Script" path="res://debug/console.gd" id="1_7f2e1"]
+
+[node name="v" type="VBoxContainer"]
+offset_right = 735.0
+offset_bottom = 43.0
+script = ExtResource("1_7f2e1")
+
+[node name="output" type="TextEdit" parent="."]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+editable = false
+
+[node name="input" type="LineEdit" parent="."]
+layout_mode = 2
+
+[connection signal="text_submitted" from="input" to="." method="_text_submitted"]

@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://blpaxayfa6s8n"]
+
+[ext_resource type="Script" path="res://debug/commands.gd" id="1_co40e"]
+
+[sub_resource type="GDScript" id="GDScript_v173f"]
+resource_name = "consolee"
+script/source = "extends CanvasLayer
+
+func _input(event):
+	if Input.is_action_just_pressed(\"toggle_console\"):
+		if get_child_count() == 2:
+			$v.create_instance()
+		else:
+			get_child(0).free()
+"
+
+[node name="console_host" type="CanvasLayer"]
+layer = 128
+script = SubResource("GDScript_v173f")
+
+[node name="v" parent="." instance_placeholder="res://debug/console.tscn"]
+
+[node name="commands" type="Node" parent="."]
+script = ExtResource("1_co40e")
