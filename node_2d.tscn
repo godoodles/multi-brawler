@@ -48,7 +48,7 @@ offset_bottom = 53.0
 text = "MOB x100"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://player.tscn", "res://mobs/kevin.tscn", "res://player/projectile.tscn")
+_spawnable_scenes = PackedStringArray("res://player.tscn", "res://mobs/kevin.tscn", "res://player/abilities/ability_effects/melee/melee.tscn", "res://player/abilities/ability_effects/projectile/projectile.tscn")
 spawn_path = NodePath("../entities")
 
 [node name="entities" type="Node2D" parent="."]

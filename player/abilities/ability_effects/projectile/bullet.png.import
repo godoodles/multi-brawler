@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cdmra75ofpw1v"
-path.s3tc="res://.godot/imported/bullet.png-cd0a74aa676477d8f3e277f748b3b1ae.s3tc.ctex"
+path.s3tc="res://.godot/imported/bullet.png-1d618f2964568a348fc59dd7df48635f.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://player/bullet/bullet.png"
-dest_files=["res://.godot/imported/bullet.png-cd0a74aa676477d8f3e277f748b3b1ae.s3tc.ctex"]
+source_file="res://player/abilities/ability_effects/projectile/bullet.png"
+dest_files=["res://.godot/imported/bullet.png-1d618f2964568a348fc59dd7df48635f.s3tc.ctex"]
 
 [params]
 

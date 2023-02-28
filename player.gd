@@ -58,8 +58,9 @@ var velocity_v: float:
 func _ready() -> void:
 	#equip_attack(load("res://player/ability_attack_slash.gd").new())
 	#equip_attack(load("res://player/ability_attack_slash.gd").new())
-	#equip_attack(load("res://player/ability_attack_slash.gd").new())
-	equip_attack(load("res://player/ability_attack_projectile.gd").new())
+	equip_attack(preload("res://player/abilities/ability_attack_projectile.gd").new())
+	#equip_attack(load("res://player/ability_attack_projectile.gd").new())
+
 	
 	#set_ability_special(load("res://player/ability_special_explosion.gd").new())
 	#set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())

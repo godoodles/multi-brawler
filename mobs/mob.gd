@@ -3,9 +3,8 @@ extends Node3D
 
 var target:Node3D
 
-@export var health := 3
+@export var health := 1
 
-var flash_t := 0.0
 var hit_tween:Tween
 
 var position_h: Vector2:
@@ -24,16 +23,13 @@ var position_v: float:
 func _process(delta:float) -> void:
 	if target:
 		position = position.move_toward(target.position, delta)
-	if flash_t > 0:
-		flash_t -= delta
-		if flash_t <= 0:
-			$Sprite3D.modulate = Color.WHITE
 
 @rpc("call_local")
-func hit(from, damage: int, velocity:Vector3):
-	health -= damage
+func hit(from, server_global_position:Vector3 = global_position):
+	position = server_global_position
+	health -= from.damage
 	flash()
-	knock_back(velocity.normalized())
+	knock_back(from.velocity.normalized() * from.knockback)
 
 func flash(duration := 0.1):
 	$Sprite3D.modulate = Color.CORAL
@@ -57,4 +53,5 @@ func knock_back(force:Vector3) -> void:
 		hit_tween.connect("finished", Callable(self, "set_process").bind(true))
 	else:
 		$Area3D.position.y -= 100
+		remove_from_group("mobs")
 		hit_tween.connect("finished", Callable($Sprite3D, "set_modulate").bind(Color.DIM_GRAY))

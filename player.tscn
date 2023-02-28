@@ -22,6 +22,7 @@ properties/0/sync = true
 
 [node name="Player" type="CharacterBody3D" groups=["players"]]
 script = ExtResource("2_lf1v6")
+id = null
 
 [node name="Sync" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_yu6in")

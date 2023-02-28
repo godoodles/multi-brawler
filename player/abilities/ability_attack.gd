@@ -2,7 +2,7 @@ class_name AbilityAttack
 extends Node3D
 
 var damage := 10
-var range := 3.0
+var range := 7.0
 var reload_duration := 0.3
 
 var player: Player
@@ -17,13 +17,20 @@ func process_active(delta: float) -> void:
 	reload_t -= delta
 	if reload_t <= 0:
 		_find_closest_mob()
-		if _attack():
+		if __attack():
 			reload_t = reload_duration
 	_process_active(delta)
 
 func _process_active(delta: float) -> void: pass
 
-func _attack() -> bool: return false
+func __attack() -> bool:
+	if closest_mob and distance_to_closest_mob < range:
+		return _attack()
+	else:
+		return false
+
+func _attack() -> bool:
+	return false
 
 func _find_closest_mob() -> void:
 	closest_mob = null

@@ -1,7 +1,7 @@
 # multiplayer.gd
 extends Node
 
-var server := "20.81.125.206"
+var server := "127.0.0.1"
 var port = 4434 if OS.get_environment("GODOT_PORT").is_empty() else int(OS.get_environment("GODOT_PORT"))
 
 var delta_sum := 0.0
@@ -18,8 +18,8 @@ func _ready():
 	if DisplayServer.get_name() == "headless":
 		print("Starting dedicated server...")
 		_host_buttom_pressed()
-	#else:
-	#	test()
+	else:
+		test()
 
 
 func test() -> void:
