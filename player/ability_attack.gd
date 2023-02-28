@@ -14,11 +14,11 @@ var direction_to_closest_mob := Vector2()
 var reload_t := 0.0
 
 func process_active(delta: float) -> void:
-	reload_t -= delta
+	reload_t = delta
 	if reload_t <= 0:
 		_find_closest_mob()
 		if _attack():
-			reload_t += reload_duration
+			reload_t = reload_duration
 	_process_active(delta)
 
 func _process_active(delta: float) -> void: pass
