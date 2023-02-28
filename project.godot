@@ -19,10 +19,6 @@ config/icon="res://icon.svg"
 
 ConsoleHost="*res://debug/console_host.tscn"
 
-[display]
-
-window/vsync/vsync_mode=0
-
 [input]
 
 movement_left={

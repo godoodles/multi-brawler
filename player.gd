@@ -19,6 +19,8 @@ var active_ability: Ability
 
 var last_direction := Vector2()
 
+signal attack
+
 @export var id := 1 :
 	set(value):
 		id = value
@@ -54,13 +56,13 @@ var velocity_v: float:
 		velocity.y = value
 
 func _ready() -> void:
-	equip_attack(load("res://player/ability_attack_slash.gd").new())
-	equip_attack(load("res://player/ability_attack_slash.gd").new())
-	equip_attack(load("res://player/ability_attack_slash.gd").new())
-	equip_attack(load("res://player/ability_attack_slash.gd").new())
+	#equip_attack(load("res://player/ability_attack_slash.gd").new())
+	#equip_attack(load("res://player/ability_attack_slash.gd").new())
+	#equip_attack(load("res://player/ability_attack_slash.gd").new())
+	equip_attack(load("res://player/ability_attack_projectile.gd").new())
 	
-	set_ability_special(load("res://player/ability_special_explosion.gd").new())
-	set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
+	#set_ability_special(load("res://player/ability_special_explosion.gd").new())
+	#set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
 #	set_ability_dodge(load("res://player/ability_dodge_jump.gd").new())
 
 func equip_attack(attack):

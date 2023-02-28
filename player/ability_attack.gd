@@ -32,6 +32,8 @@ func _find_closest_mob() -> void:
 	# it could instead work like brotato where the weapons are rotating, or something more original
 	var direction = Vector2.RIGHT.rotated(randf() * TAU)
 	for mob in get_tree().get_nodes_in_group("mobs"):
+		if mob.health <= 0.0:
+			continue
 		var distance = player.position.distance_to(mob.position)
 		if distance < distance_to_closest_mob:
 			direction_to_closest_mob = player.position_h.direction_to(mob.position_h)

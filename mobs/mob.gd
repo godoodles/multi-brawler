@@ -3,9 +3,10 @@ extends Node3D
 
 var target:Node3D
 
-var health := 50
+@export var health := 3
 
 var flash_t := 0.0
+var hit_tween:Tween
 
 var position_h: Vector2:
 	get:
@@ -28,16 +29,32 @@ func _process(delta:float) -> void:
 		if flash_t <= 0:
 			$Sprite3D.modulate = Color.WHITE
 
-func hit(from, damage: int):
+@rpc("call_local")
+func hit(from, damage: int, velocity:Vector3):
 	health -= damage
 	flash()
-	if health <= 0:
-		die()
-		return
-
-func die():
-	queue_free()
+	knock_back(velocity.normalized())
 
 func flash(duration := 0.1):
-	flash_t = duration
 	$Sprite3D.modulate = Color.CORAL
+
+func knock_back(force:Vector3) -> void:
+	if hit_tween:
+		hit_tween.kill()
+		
+	force.y = 0.0
+	
+	if health <= 0:
+		force *= 2.0
+	
+	hit_tween = create_tween().bind_node(self)
+	hit_tween.set_parallel(true)
+	hit_tween.tween_property(self, "position", position + force, 0.15)
+	hit_tween.tween_property($Sprite3D, "modulate", Color.WHITE, 0.15)
+	set_process(false)
+
+	if health > 0:
+		hit_tween.connect("finished", Callable(self, "set_process").bind(true))
+	else:
+		$Area3D.position.y -= 100
+		hit_tween.connect("finished", Callable($Sprite3D, "set_modulate").bind(Color.DIM_GRAY))
