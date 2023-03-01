@@ -1,6 +1,8 @@
 class_name Player
 extends CharacterBody3D
 
+@export var health = 10
+
 @onready var controller: Controller = $Controller
 @onready var body = %Body
 @onready var hands = %Hands
@@ -18,6 +20,8 @@ var movement_decel := 20.0
 var active_ability: Ability
 
 var last_direction := Vector2()
+
+signal effect
 
 @export var id := 1 :
 	set(value):
@@ -54,13 +58,13 @@ var velocity_v: float:
 		velocity.y = value
 
 func _ready() -> void:
-	equip_attack(load("res://player/ability_attack_slash.gd").new())
-	equip_attack(load("res://player/ability_attack_slash.gd").new())
-	equip_attack(load("res://player/ability_attack_slash.gd").new())
-	equip_attack(load("res://player/ability_attack_slash.gd").new())
+	$Sprite3D/Health.text = str(health)
+	equip_attack(preload("res://player/abilities/ability_attack_projectile.gd").new())
+	equip_attack(preload("res://player/abilities/slash.tscn").instantiate())
+
 	
-	set_ability_special(load("res://player/ability_special_explosion.gd").new())
-	set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
+	#set_ability_special(load("res://player/ability_special_explosion.gd").new())
+	#set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
 #	set_ability_dodge(load("res://player/ability_dodge_jump.gd").new())
 
 func equip_attack(attack):
@@ -118,3 +122,8 @@ func process_movement(delta, speed := -1.0, accel := -1.0, decel := -1.0):
 	var target_velocity_h := controller.get_direction() * speed
 	var weight := accel if target_velocity_h.length() > 0.5 else decel
 	velocity_h = lerp(velocity_h, target_velocity_h, weight * delta)
+
+@rpc("call_local")
+func hit(from, server_global_position:Vector3 = global_position):
+	health -= from.damage
+	$Sprite3D/Health.text = str(health)

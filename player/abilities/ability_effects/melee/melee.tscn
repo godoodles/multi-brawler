@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://xvejqt2bwl4u"]
+
+[ext_resource type="Script" path="res://player/abilities/ability_effects/ability_effect.gd" id="1_82gq5"]
+
+[node name="melee" type="Node3D"]
+script = ExtResource("1_82gq5")
