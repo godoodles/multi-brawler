@@ -9,5 +9,5 @@ func _attack():
 	projectile.position = global_position
 	projectile.velocity = projectile.position.direction_to(closest_mob.position)
 	projectile.velocity.y = 0.0
-	player.attack.emit(projectile)
+	player.effect.emit(projectile)
 	return true

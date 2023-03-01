@@ -20,32 +20,39 @@ size = Vector3(40, 1, 40)
 script = ExtResource("1_gdnrl")
 
 [node name="host_buttom" type="Button" parent="."]
-offset_left = 292.0
+offset_left = 19.0
 offset_top = 1.0
-offset_right = 445.0
+offset_right = 172.0
 offset_bottom = 55.0
 text = "HOST"
 
 [node name="connect_button" type="Button" parent="."]
-offset_left = 537.0
+offset_left = 264.0
 offset_top = 2.0
-offset_right = 690.0
+offset_right = 417.0
 offset_bottom = 56.0
 text = "CONNECT"
 
 [node name="mob_button" type="Button" parent="."]
-offset_left = 765.0
+offset_left = 492.0
 offset_top = -1.0
-offset_right = 918.0
+offset_right = 645.0
 offset_bottom = 53.0
 text = "MOB"
 
 [node name="mob_100_button" type="Button" parent="."]
-offset_left = 952.0
+offset_left = 679.0
 offset_top = -1.0
-offset_right = 1105.0
+offset_right = 832.0
 offset_bottom = 53.0
 text = "MOB x100"
+
+[node name="wave_button" type="Button" parent="."]
+offset_left = 858.0
+offset_top = -1.0
+offset_right = 1011.0
+offset_bottom = 53.0
+text = "WAVE"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn", "res://mobs/kevin.tscn", "res://player/abilities/ability_effects/melee/melee.tscn", "res://player/abilities/ability_effects/projectile/projectile.tscn")
@@ -79,3 +86,4 @@ transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 
 [connection signal="pressed" from="connect_button" to="." method="_connect_pressed"]
 [connection signal="pressed" from="mob_button" to="." method="_mob_button_pressed"]
 [connection signal="pressed" from="mob_100_button" to="." method="_on_mob_100_button_pressed"]
+[connection signal="pressed" from="wave_button" to="." method="_wave_button_pressed"]

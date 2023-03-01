@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://cwm6r0ukje2r8"]
+
+[ext_resource type="Script" path="res://player/abilities/ability_attack.gd" id="1_nodu4"]
+[ext_resource type="Texture2D" uid="uid://crhlwaqfsf55b" path="res://icon.svg" id="1_o6862"]
+[ext_resource type="PackedScene" uid="uid://xvejqt2bwl4u" path="res://player/abilities/ability_effects/melee/melee.tscn" id="2_c0j8d"]
+
+[node name="slash" type="Node3D"]
+script = ExtResource("1_nodu4")
+range = 1.0
+reload_duration = 0.5
+effect = ExtResource("2_c0j8d")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+pixel_size = 0.0025
+texture = ExtResource("1_o6862")

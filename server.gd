@@ -21,13 +21,12 @@ func _ready():
 	else:
 		test()
 
-
 func test() -> void:
 	seed(5)
 	
 	if _host_buttom_pressed():
 		get_window().position = Vector2i(0, 100)
-		for i in 2:
+		for i in 0:
 			spawn_mob()
 	else:
 		_connect_pressed()
@@ -86,7 +85,7 @@ func add_player(id: int):
 	# Randomize player position.
 	player.position = Vector3(randf_range(-5, 5), 0.0, randf_range(-5, 5))
 	player.name = str(id)
-	player.connect("attack", Callable(self, "_attack"))
+	player.effect.connect(_effect.bind())
 	
 	$entities.add_child(player, true)
 
@@ -95,8 +94,8 @@ func del_player(id: int):
 		return
 	$entities.get_node(str(id)).queue_free()
 
-func _attack(attack) -> void:
-	$entities.add_child(attack, true)
+func _effect(effect) -> void:
+	$entities.add_child(effect, true)
 
 func _mob_button_pressed():
 	spawn_mob.rpc_id(1)
@@ -108,6 +107,12 @@ func _on_mob_100_button_pressed() -> void:
 @rpc("any_peer", "call_local")
 func spawn_mob():
 	var mob = preload("res://mobs/kevin.tscn").instantiate()
-	mob.position = Vector3(randf_range(-10, 10), 0.0, randf_range(-10, 10))
+	mob.position = Vector3(randf_range(-20, 20), 0.0, randf_range(-20, 20))
 	mob.target = $entities.get_child(0)
 	$entities.add_child(mob, true)
+	mob.effect.connect(_effect.bind())
+
+func _wave_button_pressed():
+	for i in 100:
+		spawn_mob.rpc_id(1)
+		await get_tree().create_timer(0.3).timeout

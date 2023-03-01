@@ -22,7 +22,6 @@ properties/0/sync = true
 
 [node name="Player" type="CharacterBody3D" groups=["players"]]
 script = ExtResource("2_lf1v6")
-id = null
 
 [node name="Sync" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_yu6in")
@@ -34,6 +33,11 @@ shape = SubResource("SphereShape3D_65g03")
 transform = Transform3D(0.754573, 0, 0, 0, 0.754573, 0, 0, 0, 0.754573, 0, 0, 0)
 billboard = 1
 texture = ExtResource("1_kps7a")
+
+[node name="Health" type="Label3D" parent="Sprite3D"]
+transform = Transform3D(1.32525, 0.00032857, 0.00447531, 1.15598e-09, 1.3217, -0.0970361, -0.00448735, 0.0970356, 1.32169, 0, 1.05326, 0)
+text = "123"
+font_size = 64
 
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("4_m2nk6")

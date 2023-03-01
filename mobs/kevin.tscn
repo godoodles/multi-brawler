@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://blxkd8lt84sfu"]
+[gd_scene load_steps=7 format=3 uid="uid://blxkd8lt84sfu"]
 
 [ext_resource type="Script" path="res://mobs/mob.gd" id="1_ag14a"]
 [ext_resource type="Texture2D" uid="uid://cipt6c4ia61v0" path="res://mobs/kevin.png" id="1_kroiw"]
+[ext_resource type="Script" path="res://player/abilities/ability_attack.gd" id="3_2hpxl"]
+[ext_resource type="PackedScene" uid="uid://xvejqt2bwl4u" path="res://player/abilities/ability_effects/melee/melee.tscn" id="4_3tjcd"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8by2m"]
 properties/0/path = NodePath(".:position")
@@ -15,6 +17,7 @@ properties/1/sync = true
 
 [node name="kevin" type="Node3D" groups=["mobs"]]
 script = ExtResource("1_ag14a")
+speed = 5.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_8by2m")
@@ -30,3 +33,12 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("SphereShape3D_ki0rs")
+
+[node name="Slot" type="Node3D" parent="."]
+
+[node name="AbilityAttack" type="Node3D" parent="Slot"]
+script = ExtResource("3_2hpxl")
+range = 1.0
+reload_duration = 1.0
+effect = ExtResource("4_3tjcd")
+group = "players"
