@@ -6,12 +6,13 @@ var damage := 10
 @export var reload_duration := 0.3
 @export var effect:PackedScene
 @export var group := "mobs"
+@export var slot:Slot.Type
 
 var player
+var attack_tween
 
-var closest_mob
+var closest_mob:Node3D
 var distance_to_closest_mob := 9999.0
-var direction_to_closest_mob := Vector2()
 
 var reload_t := 0.0
 
@@ -23,14 +24,39 @@ func process_active(delta: float) -> void:
 			reload_t = reload_duration
 	_process_active(delta)
 	
-	if closest_mob and has_node("Sprite3D"):
-		$Sprite3D.position = lerp($Sprite3D.position, player.position.direction_to(closest_mob.position) * 1.0, delta * 10.0)
+	if closest_mob:
+		if reload_t <= 0:
+			get_parent_node_3d().rotation.y = lerp_angle(get_parent_node_3d().rotation.y, y_angle_to_close_mob(), delta * 5.0)
+	else:
+		get_parent_node_3d().rotation.y = lerp_angle(get_parent_node_3d().rotation.y, 0, delta * 2.5)
 
 func _process_active(delta: float) -> void: pass
 
 func _physics_process(delta) -> void:
 	process_active(delta)
 
+func direction_to_closest_mob() -> Vector3:
+	if not closest_mob:
+		return Vector3.ZERO
+
+	var m = Vector3(closest_mob.global_position.x, 0, closest_mob.global_position.z)
+	var s = Vector3(get_parent().global_position.x, 0, get_parent().global_position.z)
+	return s.direction_to(m)
+	
+func y_angle_to_close_mob() -> float:
+	var d = direction_to_closest_mob()
+	return Vector2(d.x, -d.z).angle()
+
+func attack_animation() -> void:
+	var r = direction_to_closest_mob()
+	if attack_tween:
+		attack_tween.kill()
+
+	attack_tween = create_tween().bind_node(self)
+	attack_tween.tween_property(get_parent(), "position", r * 2, 0.02)
+	attack_tween.tween_property(get_parent(), "position", Vector3.ZERO, 0.1)
+	get_parent_node_3d().rotation.y = y_angle_to_close_mob()
+	
 func __attack() -> bool:
 	if closest_mob and distance_to_closest_mob < range:
 		return _attack()
@@ -38,26 +64,25 @@ func __attack() -> bool:
 		return false
 
 func _attack():
+	attack_animation()
+	
 	var e:AbilityEffect = effect.instantiate()
-	e.emitter = player
+	e.emitter = player.get_path()
 	e.position = global_position
 	e.velocity = e.position.direction_to(closest_mob.position)
 	e.velocity.y = 0.0
+	e.original_target = closest_mob.get_path()
 	player.effect.emit(e)
-	e.apply(closest_mob)
 	return true
 
 func _find_closest_mob() -> void:
 	closest_mob = null
 	distance_to_closest_mob = 99999.0
-	# Choosing a random direction so not every attack targets the same enemy
-	# it could instead work like brotato where the weapons are rotating, or something more original
-	#var direction = Vector2.RIGHT.rotated(randf() * TAU)
+
 	for mob in get_tree().get_nodes_in_group(group):
 		var distance = player.position.distance_to(mob.position)
 		if distance < distance_to_closest_mob:
-			direction_to_closest_mob = player.position_h.direction_to(mob.position_h)
-			#if direction.dot(direction_to_closest_mob) > 0.5:
+
 			distance_to_closest_mob = distance
 			closest_mob = mob
 

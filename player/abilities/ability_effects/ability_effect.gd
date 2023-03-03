@@ -1,7 +1,8 @@
 extends Node3D
 class_name AbilityEffect
 
-@export var emitter:Node
+@export var emitter:NodePath
+@export var original_target:NodePath
 @export var velocity:Vector3
 @export var timeout:float = 5.0
 @export var knockback:float = 1.0

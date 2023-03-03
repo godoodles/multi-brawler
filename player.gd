@@ -59,10 +59,10 @@ var velocity_v: float:
 
 func _ready() -> void:
 	$Sprite3D/Health.text = str(health)
-	equip_attack(preload("res://player/abilities/ability_attack_projectile.gd").new())
+	equip_attack(preload("res://player/abilities/projectile.tscn").instantiate())
 	equip_attack(preload("res://player/abilities/slash.tscn").instantiate())
+	#equip_attack(preload("res://player/abilities/slash.tscn").instantiate())
 
-	
 	#set_ability_special(load("res://player/ability_special_explosion.gd").new())
 	#set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
 #	set_ability_dodge(load("res://player/ability_dodge_jump.gd").new())
@@ -70,7 +70,9 @@ func _ready() -> void:
 func equip_attack(attack):
 	attacks.push_back(attack)
 	attack.player = self
-	hands.add_child(attack)
+	for slot in $Slot.get_children():
+		if slot.try_add(attack):
+			break
 
 func set_ability_dodge(ability):
 	ability_dodge = ability
