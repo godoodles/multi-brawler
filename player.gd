@@ -2,6 +2,9 @@ class_name Player
 extends CharacterBody3D
 
 @export var health = 10
+@export var max_health = 10
+@export var attack_speed:int = 1
+@export var attack_range:int = 1
 
 @onready var controller: Controller = $Controller
 @onready var body = %Body
@@ -13,7 +16,7 @@ var attacks := []
 var ability_dodge
 var ability_special
 
-var movement_speed := 6.0
+@export var movement_speed := 6.0
 var movement_accel := 10.0
 var movement_decel := 20.0
 
@@ -61,18 +64,23 @@ func _ready() -> void:
 	$Sprite3D/Health.text = str(health)
 	equip_attack(preload("res://player/abilities/projectile.tscn").instantiate())
 	equip_attack(preload("res://player/abilities/slash.tscn").instantiate())
+	equip(preload("res://player/abilities/fast_legs.tscn").instantiate())
 	#equip_attack(preload("res://player/abilities/slash.tscn").instantiate())
 
 	#set_ability_special(load("res://player/ability_special_explosion.gd").new())
 	#set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
 #	set_ability_dodge(load("res://player/ability_dodge_jump.gd").new())
 
+func equip(ability) -> void:
+	ability.player = self
+	for slot in $Slot.get_children():
+		if slot.try_add(ability):
+			print(ability)
+			break
+
 func equip_attack(attack):
 	attacks.push_back(attack)
-	attack.player = self
-	for slot in $Slot.get_children():
-		if slot.try_add(attack):
-			break
+	equip(attack)
 
 func set_ability_dodge(ability):
 	ability_dodge = ability

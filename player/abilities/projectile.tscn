@@ -6,7 +6,7 @@
 
 [node name="ability_projectile" type="Node3D"]
 script = ExtResource("1_jxt4c")
-reload_duration = 0.2
+reload_duration = 5.0
 effect = ExtResource("2_a3lxu")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]

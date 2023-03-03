@@ -1,6 +1,8 @@
 class_name Ability
 extends Node3D
 
+@export var slot:Slot.Type
+
 var player: Player
 
 var active_duration := 0.3

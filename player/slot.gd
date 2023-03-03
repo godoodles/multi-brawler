@@ -2,7 +2,8 @@ class_name Slot
 extends Marker3D
 
 enum Type { 
-	hand
+	hand,
+	leg
 }
 
 @export var type:Type

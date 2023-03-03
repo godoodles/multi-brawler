@@ -17,7 +17,7 @@ var distance_to_closest_mob := 9999.0
 var reload_t := 0.0
 
 func process_active(delta: float) -> void:
-	reload_t -= delta
+	reload_t -= delta * (1.0 + player.attack_speed)
 	if reload_t <= 0:
 		_find_closest_mob()
 		if __attack():
@@ -53,12 +53,12 @@ func attack_animation() -> void:
 		attack_tween.kill()
 
 	attack_tween = create_tween().bind_node(self)
-	attack_tween.tween_property(get_parent(), "position", r * 2, 0.02)
-	attack_tween.tween_property(get_parent(), "position", Vector3.ZERO, 0.1)
+	attack_tween.tween_property(get_parent(), "position", r * distance_to_closest_mob, 0.02)
+	attack_tween.tween_property(get_parent(), "position", Vector3.ZERO, 0.25)
 	get_parent_node_3d().rotation.y = y_angle_to_close_mob()
-	
+ 
 func __attack() -> bool:
-	if closest_mob and distance_to_closest_mob < range:
+	if closest_mob and distance_to_closest_mob < (range + player.attack_range):
 		return _attack()
 	else:
 		return false

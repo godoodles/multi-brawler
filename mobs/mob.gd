@@ -5,6 +5,8 @@ var target:Node3D
 
 @export var health := 1
 @export var speed := 1.0
+@export var attack_speed:int = 1
+@export var attack_range:int = 1
 
 signal effect
 

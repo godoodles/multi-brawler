@@ -8,7 +8,7 @@
 transform = Transform3D(0.999861, 0.0166846, 0, -0.0166846, 0.999861, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_nodu4")
 range = 4.0
-reload_duration = 0.1
+reload_duration = 0.5
 effect = ExtResource("2_c0j8d")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
