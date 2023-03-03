@@ -109,8 +109,8 @@ func spawn_mob():
 	var mob = preload("res://mobs/kevin.tscn").instantiate()
 	mob.position = Vector3(randf_range(-20, 20), 0.0, randf_range(-20, 20))
 	mob.target = $entities.get_child(0)
-	$entities.add_child(mob, true)
 	mob.effect.connect(_effect.bind())
+	$entities.add_child(mob, true)
 
 func _wave_button_pressed():
 	for i in 100:
