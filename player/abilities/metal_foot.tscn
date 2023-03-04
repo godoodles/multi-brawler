@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bm5f3fbw4p46y"]
+
+[ext_resource type="Script" path="res://player/abilities/ability.gd" id="1_2wlh4"]
+[ext_resource type="Texture2D" uid="uid://do2kxypxmju7q" path="res://player/metal_foot.png" id="2_8dl58"]
+
+[node name="metal_foot" type="Node3D"]
+script = ExtResource("1_2wlh4")
+slot = 1
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+pixel_size = 0.005
+billboard = 1
+render_priority = 1
+texture = ExtResource("2_8dl58")

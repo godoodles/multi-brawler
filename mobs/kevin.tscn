@@ -17,7 +17,7 @@ properties/1/sync = true
 
 [node name="kevin" type="Node3D" groups=["mobs"]]
 script = ExtResource("1_ag14a")
-speed = 11.0
+speed = 5.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_8by2m")

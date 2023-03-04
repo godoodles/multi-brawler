@@ -3,24 +3,28 @@ extends Marker3D
 
 enum Type { 
 	hand,
-	leg
+	leg,
+	carry
 }
 
 @export var type:Type
 
-func try_add(child) -> bool:
+func try_add(child, allow_replace := false) -> bool:
 	if child == null:
 		return false
 
 	if type != child.slot:
 		return false
-	
-	if not has_node("root"):
-		return false
-	
-	if $root.get_child_count() != 2: # this is dumb
-		return false
-	
-	$root.add_child(child)
+
+	for c in get_children():
+		if c is Ability or c is AbilityAttack:
+			if not allow_replace:
+				return false
+			else:
+				c.get_parent().remove_child(c)
+				c.queue_free()
+				break
+
+	add_child(child)
 
 	return true
