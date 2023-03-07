@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://entities/player/abilities/ability_effects/projectile/ability_effect_projectile.gd" id="1_kl82d"]
+[ext_resource type="Texture2D" uid="uid://cdmra75ofpw1v" path="res://entities/player/abilities/ability_effects/projectile/bullet.png" id="2_wpt6q"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_71axe"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = false
+properties/1/path = NodePath(".:velocity")
+properties/1/spawn = true
+properties/1/sync = false
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sxhuy"]
+
+[node name="projectile" type="Node3D"]
+script = ExtResource("1_kl82d")
+
+[node name="Sprite" type="Sprite3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 4.37114e-08, 1.91069e-15, 0, 0, 0)
+pixel_size = 0.03
+texture = ExtResource("2_wpt6q")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_71axe")
+
+[node name="Area" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.107192, 0, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape3D" parent="Area"]
+shape = SubResource("SphereShape3D_sxhuy")
+
+[connection signal="area_entered" from="Area" to="." method="_area_entered"]

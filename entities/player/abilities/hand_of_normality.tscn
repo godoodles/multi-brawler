@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" uid="uid://bk2x75am82s7a" path="res://assets/characters/player/hand.png" id="1_gwglv"]
+[ext_resource type="Script" path="res://entities/player/abilities/ability.gd" id="1_wuutm"]
+
+[node name="hand_of_normality" type="Node3D"]
+script = ExtResource("1_wuutm")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+pixel_size = 0.005
+billboard = 1
+render_priority = 1
+texture = ExtResource("1_gwglv")

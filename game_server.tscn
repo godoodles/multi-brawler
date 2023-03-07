@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://j5ft6p16d3xb"]
+
+[ext_resource type="Script" path="res://game_server.gd" id="1_15v4o"]
+[ext_resource type="Texture2D" uid="uid://b85loe2eskeao" path="res://environment/floor_checker.png" id="2_0eoo0"]
+[ext_resource type="Script" path="res://game/camera/camera.gd" id="3_1l3j6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_esqxs"]
+size = Vector3(40, 1, 40)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m6xn8"]
+albedo_color = Color(0.14902, 0.180392, 0.227451, 1)
+albedo_texture = ExtResource("2_0eoo0")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_lxj38"]
+size = Vector3(40, 1, 40)
+
+[node name="GameServer" type="Node3D"]
+script = ExtResource("1_15v4o")
+
+[node name="Map" type="Node3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/StaticBody3D"]
+shape = SubResource("BoxShape3D_esqxs")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/StaticBody3D"]
+material_override = SubResource("StandardMaterial3D_m6xn8")
+mesh = SubResource("BoxMesh_lxj38")
+
+[node name="Entities" type="Node3D" parent="."]
+
+[node name="Scene" type="Node3D" parent="."]
+
+[node name="Camera" type="Node3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+script = ExtResource("3_1l3j6")
+
+[node name="Camera3D" type="Camera3D" parent="Scene/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 90)
+current = true
+fov = 8.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 3.85936, 0)

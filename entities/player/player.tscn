@@ -1,0 +1,110 @@
+[gd_scene load_steps=10 format=3 uid="uid://d15y213dr00cq"]
+
+[ext_resource type="Script" path="res://entities/player/player.gd" id="1_ns80y"]
+[ext_resource type="Texture2D" uid="uid://crhlwaqfsf55b" path="res://icon.svg" id="2_0ovfs"]
+[ext_resource type="Script" path="res://entities/player/controller.gd" id="3_01wqi"]
+[ext_resource type="Script" path="res://entities/player/player_input.gd" id="4_40ji2"]
+[ext_resource type="Script" path="res://entities/player/slot.gd" id="5_eo1rk"]
+[ext_resource type="Script" path="res://entities/player/remote_transform_slot.gd" id="6_t123e"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_65g03"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ias7w"]
+properties/0/path = NodePath(".:direction")
+properties/0/spawn = false
+properties/0/sync = true
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yu6in"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:id")
+properties/1/spawn = true
+properties/1/sync = false
+
+[node name="Player" type="CharacterBody3D" groups=["players"]]
+script = ExtResource("1_ns80y")
+attack_speed = 0
+attack_range = 0
+slots = Array[NodePath]([NodePath("Weapons/HandRight"), NodePath("Weapons/HandRight/carry"), NodePath("Weapons/HandLeft"), NodePath("Weapons/HandLeft/carry"), NodePath("Body/LegRight"), NodePath("Body/LegLeft")])
+movement_speed = 11.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_65g03")
+
+[node name="Body" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+
+[node name="Body" type="Marker3D" parent="Body"]
+unique_name_in_owner = true
+script = ExtResource("5_eo1rk")
+
+[node name="BodySprite" type="Sprite3D" parent="Body/Body"]
+transform = Transform3D(0.754573, 0, 0, 0, 0.754573, 0, 0, 0, 0.754573, 0, 0, 0)
+texture = ExtResource("2_0ovfs")
+
+[node name="LegRight" type="Marker3D" parent="Body"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.434, 0)
+script = ExtResource("5_eo1rk")
+type = 1
+
+[node name="LegLeft" type="Marker3D" parent="Body"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.434, 0)
+script = ExtResource("5_eo1rk")
+type = 1
+
+[node name="Head" type="Marker3D" parent="Body"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.408846, 0)
+script = ExtResource("5_eo1rk")
+
+[node name="UI" type="Node3D" parent="Body"]
+
+[node name="HealthLabel" type="Label3D" parent="Body/UI"]
+unique_name_in_owner = true
+transform = Transform3D(0.999998, 0.00024793, 0.00337695, 8.72271e-10, 0.997319, -0.0732208, -0.00338603, 0.0732204, 0.997312, 0, 0.794762, 0)
+text = "123"
+font_size = 64
+
+[node name="Weapons" type="Node3D" parent="."]
+
+[node name="HandRight" type="Marker3D" parent="Weapons"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.079, -0.053)
+script = ExtResource("5_eo1rk")
+
+[node name="carry" type="Marker3D" parent="Weapons/HandRight"]
+script = ExtResource("5_eo1rk")
+type = 2
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Weapons/HandRight/carry"]
+script = ExtResource("6_t123e")
+
+[node name="HandLeft" type="Marker3D" parent="Weapons"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.079, -0.053)
+script = ExtResource("5_eo1rk")
+
+[node name="carry" type="Marker3D" parent="Weapons/HandLeft"]
+unique_name_in_owner = true
+script = ExtResource("5_eo1rk")
+type = 2
+
+[node name="RemoteTransform3D2" type="RemoteTransform3D" parent="Weapons/HandLeft/carry"]
+script = ExtResource("6_t123e")
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("3_01wqi")
+
+[node name="PlayerInput" type="MultiplayerSynchronizer" parent="Controller"]
+root_path = NodePath(".")
+replication_config = SubResource("SceneReplicationConfig_ias7w")
+script = ExtResource("4_40ji2")
+
+[node name="Sync" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_yu6in")
+
+[connection signal="child_entered_tree" from="Weapons/HandRight" to="Weapons/HandRight/carry/RemoteTransform3D" method="_child_entered_tree"]
+[connection signal="child_entered_tree" from="Weapons/HandLeft" to="Weapons/HandLeft/carry/RemoteTransform3D2" method="_child_entered_tree"]

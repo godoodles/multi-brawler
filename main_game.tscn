@@ -1,0 +1,87 @@
+[gd_scene load_steps=4 format=3 uid="uid://dbt3x7ymvdruw"]
+
+[ext_resource type="PackedScene" uid="uid://j5ft6p16d3xb" path="res://game_server.tscn" id="1_3ow2c"]
+[ext_resource type="Script" path="res://gui/main_menu.gd" id="3_v0p3u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yciv3"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.0784314)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="MainGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainGameViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="MainGameViewport" type="SubViewport" parent="MainGameViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="GameServer" parent="MainGameViewportContainer/MainGameViewport" instance=ExtResource("1_3ow2c")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" type="MarginContainer" parent="UI"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 0
+script = ExtResource("3_v0p3u")
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/MainMenu"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yciv3")
+
+[node name="TopMenu" type="HBoxContainer" parent="UI/MainMenu/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HostButton" type="Button" parent="UI/MainMenu/PanelContainer/TopMenu"]
+layout_mode = 2
+text = "Host"
+
+[node name="ConnectButton" type="Button" parent="UI/MainMenu/PanelContainer/TopMenu"]
+layout_mode = 2
+text = "Connect"
+
+[node name="Spacer" type="Control" parent="UI/MainMenu/PanelContainer/TopMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddMobButton" type="Button" parent="UI/MainMenu/PanelContainer/TopMenu"]
+layout_mode = 2
+text = "Spawn Mob"
+
+[node name="AddHundredMobsButton" type="Button" parent="UI/MainMenu/PanelContainer/TopMenu"]
+layout_mode = 2
+text = "100 Mobs"
+
+[node name="StartWaveButton" type="Button" parent="UI/MainMenu/PanelContainer/TopMenu"]
+layout_mode = 2
+text = "Start Wave"
+
+[connection signal="pressed" from="UI/MainMenu/PanelContainer/TopMenu/HostButton" to="UI/MainMenu" method="_on_host_button_pressed"]
+[connection signal="pressed" from="UI/MainMenu/PanelContainer/TopMenu/ConnectButton" to="UI/MainMenu" method="_on_connect_button_pressed"]
+[connection signal="pressed" from="UI/MainMenu/PanelContainer/TopMenu/AddMobButton" to="UI/MainMenu" method="_on_add_mob_button_pressed"]
+[connection signal="pressed" from="UI/MainMenu/PanelContainer/TopMenu/AddHundredMobsButton" to="UI/MainMenu" method="_on_add_hundred_mobs_button_pressed"]
+[connection signal="pressed" from="UI/MainMenu/PanelContainer/TopMenu/StartWaveButton" to="UI/MainMenu" method="_on_start_wave_button_pressed"]

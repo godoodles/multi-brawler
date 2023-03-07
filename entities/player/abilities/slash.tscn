@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://entities/player/abilities/ability_attack.gd" id="1_nodu4"]
+[ext_resource type="PackedScene" path="res://entities/player/abilities/ability_effects/melee/melee.tscn" id="2_c0j8d"]
+[ext_resource type="Texture2D" uid="uid://bod3dferhuh1m" path="res://assets/items/spikey.png" id="3_rkpcx"]
+
+[node name="slash" type="Node3D"]
+transform = Transform3D(0.999861, 0.0166846, 0, -0.0166846, 0.999861, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("1_nodu4")
+range = 4.0
+reload_duration = 0.5
+effect = ExtResource("2_c0j8d")
+slot = 2
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(-0.214045, 0.976497, 0.0252716, -0.0227501, 0.0208808, -0.999524, -0.976562, -0.214517, 0.0177459, 1.3822, 0.0803, -0.0445422)
+pixel_size = 0.005
+texture = ExtResource("3_rkpcx")
