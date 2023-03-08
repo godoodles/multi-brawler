@@ -2,7 +2,7 @@
 extends Node
 
 const PlayerScene		:= preload("res://entities/player/player.tscn")
-const EnemyKevinScene	:= preload("res://entities/enemies/kevin/kevin.tscn")
+const EnemyKevinScene	:= preload("res://entities/enemies/kevin/enemy_kevin.tscn")
 
 var server := "127.0.0.1"
 var port = 4434 if OS.get_environment("GODOT_PORT").is_empty() else int(OS.get_environment("GODOT_PORT"))
