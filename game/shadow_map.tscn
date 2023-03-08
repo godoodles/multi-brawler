@@ -1,0 +1,96 @@
+[gd_scene load_steps=5 format=3 uid="uid://dnxsp8bmabpxm"]
+
+[ext_resource type="Script" path="res://game/map_shadow_generator.gd" id="1_eayh6"]
+[ext_resource type="Texture2D" uid="uid://crhlwaqfsf55b" path="res://icon.svg" id="2_7tipq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ib3ar"]
+radius = 120.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6oj5a"]
+
+[node name="ShadowMap" type="Node2D"]
+script = ExtResource("1_eayh6")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1280, 720)
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 1)
+
+[node name="ShadowTiles" type="Node2D" parent="."]
+
+[node name="TestPlayer" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 256
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestPlayer"]
+shape = SubResource("CircleShape2D_ib3ar")
+
+[node name="Sprite2D" type="Sprite2D" parent="TestPlayer"]
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_7tipq")
+
+[node name="TilePlacers" type="Node2D" parent="."]
+
+[node name="TilePlacer" type="Area2D" parent="TilePlacers"]
+disable_mode = 2
+collision_layer = 0
+collision_mask = 256
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TilePlacers/TilePlacer"]
+shape = SubResource("CircleShape2D_6oj5a")
+
+[node name="Sprite2D" type="Sprite2D" parent="TilePlacers/TilePlacer"]
+visible = false
+modulate = Color(1, 0, 0.352941, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_7tipq")
+
+[node name="TilePlacer2" type="Area2D" parent="TilePlacers"]
+disable_mode = 2
+collision_layer = 0
+collision_mask = 256
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TilePlacers/TilePlacer2"]
+shape = SubResource("CircleShape2D_6oj5a")
+
+[node name="Sprite2D" type="Sprite2D" parent="TilePlacers/TilePlacer2"]
+visible = false
+modulate = Color(1, 0, 0.352941, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_7tipq")
+
+[node name="TilePlacer3" type="Area2D" parent="TilePlacers"]
+disable_mode = 2
+collision_layer = 0
+collision_mask = 256
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TilePlacers/TilePlacer3"]
+shape = SubResource("CircleShape2D_6oj5a")
+
+[node name="Sprite2D" type="Sprite2D" parent="TilePlacers/TilePlacer3"]
+visible = false
+modulate = Color(1, 0, 0.352941, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_7tipq")
+
+[node name="TilePlacer4" type="Area2D" parent="TilePlacers"]
+disable_mode = 2
+collision_layer = 0
+collision_mask = 256
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TilePlacers/TilePlacer4"]
+shape = SubResource("CircleShape2D_6oj5a")
+
+[node name="Sprite2D" type="Sprite2D" parent="TilePlacers/TilePlacer4"]
+visible = false
+modulate = Color(1, 0, 0.352941, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_7tipq")
+
+[connection signal="area_entered" from="TestPlayer" to="." method="_on_test_player_area_entered"]
+[connection signal="area_exited" from="TestPlayer" to="." method="_on_test_player_area_exited"]
