@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://j5ft6p16d3xb"]
+[gd_scene load_steps=18 format=3 uid="uid://j5ft6p16d3xb"]
 
 [ext_resource type="Script" path="res://game_server.gd" id="1_15v4o"]
 [ext_resource type="Texture2D" uid="uid://b85loe2eskeao" path="res://environment/floor_checker.png" id="2_0eoo0"]
+[ext_resource type="Script" path="res://game/shadow_map_offsetter.gd" id="2_hornx"]
 [ext_resource type="Script" path="res://game/camera/camera.gd" id="3_1l3j6"]
+[ext_resource type="PackedScene" uid="uid://dnxsp8bmabpxm" path="res://game/shadow_map.tscn" id="4_tr1mx"]
+[ext_resource type="Script" path="res://game/client_shadow_mesh.gd" id="5_uc0ro"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_esqxs"]
 size = Vector3(40, 1, 40)
@@ -16,8 +19,99 @@ uv1_triplanar = true
 [sub_resource type="BoxMesh" id="BoxMesh_lxj38"]
 size = Vector3(40, 1, 40)
 
+[sub_resource type="Shader" id="Shader_mpj3c"]
+code = "shader_type spatial;
+render_mode unshaded;
+
+uniform sampler2D texture_albedo;
+uniform sampler2D noise;
+uniform vec2 initial_noise_offset = vec2(0.0, 0.0);
+uniform float alpha = 0.5;
+uniform float noise_power = 0.1;
+
+
+void fragment() {
+	vec2 world_pos = vec2(NODE_POSITION_WORLD.x, NODE_POSITION_WORLD.z) / 32.0;
+	float noise_tex_1 = texture(noise, initial_noise_offset+vec2(0.66)+UV+(TIME*vec2(0.1, 0.02))+world_pos).r;
+	float noise_tex_2 = texture(noise, initial_noise_offset+           UV-(TIME*vec2(0.01, -0.04))+world_pos).g;
+	float noise_tex_3 = texture(noise, initial_noise_offset+vec2(0.33)+UV+(TIME*vec2(-0.05, -0.04))+world_pos).b;
+	float noise_combined = ((noise_tex_1 + noise_tex_2 + noise_tex_3)/3.0)-0.5;
+	vec4 albedo_tex = texture(texture_albedo, UV+noise_combined*noise_power);
+	ALBEDO = vec3(0.0);
+	ALPHA = smoothstep(0.9, 0.99, abs(1.0-albedo_tex.g)) * alpha;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_afwkr"]
+noise_type = 3
+frequency = 0.02
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ymcof"]
+width = 256
+height = 256
+seamless = true
+noise = SubResource("FastNoiseLite_afwkr")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_iivpi"]
+viewport_path = NodePath("ShadowMapGenerator")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l2chk"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_mpj3c")
+shader_parameter/initial_noise_offset = Vector2(0, 0)
+shader_parameter/alpha = 1.0
+shader_parameter/noise_power = 0.05
+shader_parameter/texture_albedo = SubResource("ViewportTexture_iivpi")
+shader_parameter/noise = SubResource("NoiseTexture2D_ymcof")
+
+[sub_resource type="QuadMesh" id="QuadMesh_8t7j0"]
+size = Vector2(32, 32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0luvl"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_mpj3c")
+shader_parameter/initial_noise_offset = Vector2(0.3, 0.3)
+shader_parameter/alpha = 0.7
+shader_parameter/noise_power = 0.05
+shader_parameter/texture_albedo = SubResource("ViewportTexture_iivpi")
+shader_parameter/noise = SubResource("NoiseTexture2D_ymcof")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t5bnk"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_mpj3c")
+shader_parameter/initial_noise_offset = Vector2(0.6, 0.6)
+shader_parameter/alpha = 0.5
+shader_parameter/noise_power = 0.1
+shader_parameter/texture_albedo = SubResource("ViewportTexture_iivpi")
+shader_parameter/noise = SubResource("NoiseTexture2D_ymcof")
+
 [node name="GameServer" type="Node3D"]
 script = ExtResource("1_15v4o")
+
+[node name="ShadowMapGenerator" type="SubViewport" parent="."]
+disable_3d = true
+handle_input_locally = false
+gui_snap_controls_to_pixels = false
+size = Vector2i(256, 256)
+size_2d_override = Vector2i(256, 256)
+
+[node name="ColorRect" type="ColorRect" parent="ShadowMapGenerator"]
+custom_minimum_size = Vector2(1024, 1024)
+offset_right = 24000.0
+offset_bottom = 24000.0
+color = Color(0, 0, 0, 1)
+
+[node name="ShadowMapOffsetter" type="Node2D" parent="ShadowMapGenerator"]
+process_priority = 1
+position = Vector2(128, 128)
+script = ExtResource("2_hornx")
+
+[node name="ShadowMap" parent="ShadowMapGenerator/ShadowMapOffsetter" instance=ExtResource("4_tr1mx")]
+position = Vector2(128, 128)
+scale = Vector2(8, 8)
 
 [node name="Map" type="Node3D" parent="."]
 
@@ -27,13 +121,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/StaticBody3D"]
 shape = SubResource("BoxShape3D_esqxs")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/StaticBody3D"]
+[node name="Ground" type="MeshInstance3D" parent="Map/StaticBody3D"]
 material_override = SubResource("StandardMaterial3D_m6xn8")
 mesh = SubResource("BoxMesh_lxj38")
 
 [node name="Entities" type="Node3D" parent="."]
 
 [node name="Scene" type="Node3D" parent="."]
+
+[node name="ClientShadow" type="MeshInstance3D" parent="Scene"]
+process_priority = 1
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0)
+material_override = SubResource("ShaderMaterial_l2chk")
+mesh = SubResource("QuadMesh_8t7j0")
+skeleton = NodePath("../Camera/Camera3D")
+script = ExtResource("5_uc0ro")
+camera_path = NodePath("../Camera")
+
+[node name="ClientShadow2" type="MeshInstance3D" parent="Scene/ClientShadow"]
+process_priority = 1
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0, -0.3)
+material_override = SubResource("ShaderMaterial_0luvl")
+mesh = SubResource("QuadMesh_8t7j0")
+skeleton = NodePath("../../Camera/Camera3D")
+
+[node name="ClientShadow3" type="MeshInstance3D" parent="Scene/ClientShadow"]
+process_priority = 1
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, -0.6)
+material_override = SubResource("ShaderMaterial_t5bnk")
+mesh = SubResource("QuadMesh_8t7j0")
+skeleton = NodePath("../../Camera/Camera3D")
 
 [node name="Camera" type="Node3D" parent="Scene"]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
@@ -45,4 +162,5 @@ current = true
 fov = 8.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Scene"]
-transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 3.85936, 0)
+transform = Transform3D(0.716793, -0.640739, 0.275066, -0.0719372, 0.324423, 0.943173, -0.693565, -0.695847, 0.186452, 0, 3.85936, 0)
+shadow_enabled = true

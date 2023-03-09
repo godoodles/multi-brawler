@@ -53,6 +53,7 @@ var velocity_v: float:
 	set(value):
 		velocity.y = value
 
+
 func _ready() -> void:
 	%HealthLabel.text = str(health)
 	#equip_attack(preload("res://player/abilities/projectile.tscn").instantiate())
@@ -62,10 +63,12 @@ func _ready() -> void:
 	equip(preload("res://entities/player/abilities/projectile.tscn").instantiate())
 	equip(preload("res://entities/player/abilities/metal_foot.tscn").instantiate())
 	#equip_attack(preload("res://player/abilities/slash.tscn").instantiate())
-
 	#set_ability_special(load("res://player/ability_special_explosion.gd").new())
 	#set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
 #	set_ability_dodge(load("res://player/ability_dodge_jump.gd").new())
+
+	# Adds itself to the tracked objects for revealing the shadow
+	_e.emit_signal("shadow_add_dynamic_revealer", self)
 
 
 func equip(ability) -> void:
@@ -98,6 +101,6 @@ func process_movement(delta, speed := -1.0, accel := -1.0, decel := -1.0):
 
 
 @rpc("call_local")
-func hit(from, server_global_position:Vector3 = global_position):
+func hit(from, _server_global_position:Vector3 = global_position):
 	health -= from.damage
 	%HealthLabel.text = str(health)

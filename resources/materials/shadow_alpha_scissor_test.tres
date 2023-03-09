@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://w20f3akeuetu"]
+
+[ext_resource type="Shader" path="res://resources/shaders/shadow_alpha_scissor.gdshader" id="1_uq0ic"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mcelr"]
+noise_type = 3
+frequency = 0.015
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_36dnn"]
+width = 256
+height = 256
+seamless = true
+noise = SubResource("FastNoiseLite_mcelr")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_iivpi"]
+viewport_path = NodePath("ShadowMapGenerator")
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_uq0ic")
+shader_parameter/noise_speed = Vector2(0.1, 0.1)
+shader_parameter/texture_albedo = SubResource("ViewportTexture_iivpi")
+shader_parameter/noise = SubResource("NoiseTexture2D_36dnn")

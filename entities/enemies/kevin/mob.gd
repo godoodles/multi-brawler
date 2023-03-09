@@ -40,8 +40,9 @@ func hit(from, server_global_position:Vector3 = global_position):
 	flash()
 	knock_back(from.velocity.normalized() * from.knockback)
 
-func flash(duration := 0.1):
+func flash(_duration := 0.1):
 	$Sprite3D.modulate = Color.CORAL
+
 
 func knock_back(force:Vector3) -> void:
 	if hit_tween:

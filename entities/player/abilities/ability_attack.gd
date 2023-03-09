@@ -30,7 +30,7 @@ func process_active(delta: float) -> void:
 	else:
 		get_parent_node_3d().rotation.y = lerp_angle(get_parent_node_3d().rotation.y, 0, delta * 2.5)
 
-func _process_active(delta: float) -> void: pass
+func _process_active(_delta: float) -> void: pass
 
 func _physics_process(delta) -> void:
 	process_active(delta)

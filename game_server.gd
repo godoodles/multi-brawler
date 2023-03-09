@@ -108,7 +108,7 @@ func add_player(id: int):
 
 
 func del_player(id: int):
-	if not $entities.has_node(str(id)):
+	if not $Entities.has_node(str(id)):
 		return
 	entities.get_node(str(id)).queue_free()
 
