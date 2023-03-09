@@ -91,6 +91,10 @@ shader_parameter/noise = SubResource("NoiseTexture2D_ymcof")
 [node name="GameWorld" type="Node3D"]
 script = ExtResource("1_oklj1")
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://entities/player/player.tscn")
+spawn_path = NodePath("../Entities")
+
 [node name="ShadowMapGenerator" type="SubViewport" parent="."]
 disable_3d = true
 handle_input_locally = false
@@ -132,6 +136,7 @@ mesh = SubResource("BoxMesh_lxj38")
 [node name="ClientShadow" type="MeshInstance3D" parent="Scene"]
 process_priority = 1
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0)
+visible = false
 material_override = SubResource("ShaderMaterial_l2chk")
 mesh = SubResource("QuadMesh_8t7j0")
 skeleton = NodePath("../Camera/Camera3D")

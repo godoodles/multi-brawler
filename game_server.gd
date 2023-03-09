@@ -1,13 +1,14 @@
 # multiplayer.gd
 extends Node
 
-const GameWorld := preload("res://game_world.tscn")
+var GameWorldScene := preload("res://game_world.tscn")
 
 var server := "127.0.0.1"
 var port = 4434 if OS.get_environment("GODOT_PORT").is_empty() else int(OS.get_environment("GODOT_PORT"))
 var delta_sum := 0.0
 
 @onready var game_viewport := $MainGameViewportContainer/MainGameViewport
+
 
 func _ready():
 	print(Version.checksum)
@@ -29,6 +30,14 @@ func _ready():
 		test()
 
 
+func change_level(_new_map:PackedScene):
+	for game_world in game_viewport.get_children():
+		game_viewport.remove_child(game_world)
+		game_world.queue_free()
+	
+	game_viewport.add_child(_new_map.instantiate())
+
+
 func test() -> void:
 	seed(5)
 	
@@ -40,14 +49,10 @@ func test() -> void:
 
 
 func start_game():
-	for g in game_viewport.get_children():
-		g.queue_free()
-	
-	print("Adding world")
-	var new_game := GameWorld.instantiate()
-	game_viewport.add_child(new_game)
 	get_tree().paused = false
 	set_process(true)
+	if multiplayer.is_server():
+		change_level.call_deferred(GameWorldScene)
 
 
 func start_as_server() -> bool:

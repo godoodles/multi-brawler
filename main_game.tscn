@@ -21,6 +21,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5k6jq")
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://game_world.tscn")
+spawn_path = NodePath("../MainGameViewportContainer/MainGameViewport")
+
 [node name="MainGameViewportContainer" type="SubViewportContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15

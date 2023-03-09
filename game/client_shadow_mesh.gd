@@ -5,8 +5,7 @@ extends MeshInstance3D
 
 
 func _enter_tree():
-	pass
-	#show()
+	show()
 
 
 func _process(_delta):

@@ -9,12 +9,18 @@ func _ready():
 	_e.debug_spawn_single_mob.connect(spawn_mobs.bind(1))
 	_e.debug_spawn_multi_mobs.connect(spawn_mobs)
 	_e.debug_spawn_wave.connect(spawn_wave)
+	if multiplayer.is_server():
+		setup_as_server()
 	
+
+func setup_as_server():
+	print("Setting up map on server")
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(del_player)
 	
 	# Spawn already connected players
 	for id in multiplayer.get_peers():
+		print("spawning player:", id)
 		add_player(id)
 
 	# Spawn the local player unless this is a dedicated server export.
@@ -28,7 +34,9 @@ func _exit_tree():
 
 
 func add_player(id: int):
-	prints("New peer", id)
+	if multiplayer.is_server():
+		print("Server:")
+	prints("New peer:", id)
 	var player = PlayerScene.instantiate()
 	# Set player id.
 	player.id = id
@@ -42,6 +50,7 @@ func add_player(id: int):
 
 
 func del_player(id: int):
+	prints("Peer dropped:", id)
 	if not entities.has_node(str(id)):
 		return
 	entities.get_node(str(id)).queue_free()
