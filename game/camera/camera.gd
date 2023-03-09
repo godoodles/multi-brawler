@@ -13,10 +13,10 @@ var position_v: float:
 	set(value):
 		position.y = value
 
+
 func _process(_delta: float) -> void:
 	var player
 	for p in get_tree().get_nodes_in_group("players"):
-		#printt(p.id, multiplayer.get_unique_id())
 		if p.id == multiplayer.get_unique_id():
 			player = p
 	if player:

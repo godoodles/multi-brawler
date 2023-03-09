@@ -1,18 +1,18 @@
 [gd_scene load_steps=18 format=3 uid="uid://j5ft6p16d3xb"]
 
-[ext_resource type="Script" path="res://game_server.gd" id="1_15v4o"]
-[ext_resource type="Texture2D" uid="uid://b85loe2eskeao" path="res://environment/floor_checker.png" id="2_0eoo0"]
-[ext_resource type="Script" path="res://game/shadow_map_offsetter.gd" id="2_hornx"]
-[ext_resource type="Script" path="res://game/camera/camera.gd" id="3_1l3j6"]
-[ext_resource type="PackedScene" uid="uid://dnxsp8bmabpxm" path="res://game/shadow_map.tscn" id="4_tr1mx"]
-[ext_resource type="Script" path="res://game/client_shadow_mesh.gd" id="5_uc0ro"]
+[ext_resource type="Script" path="res://game_world.gd" id="1_oklj1"]
+[ext_resource type="Script" path="res://game/shadow_map_offsetter.gd" id="2_qvw0n"]
+[ext_resource type="PackedScene" uid="uid://dnxsp8bmabpxm" path="res://game/shadow_map.tscn" id="3_4enk1"]
+[ext_resource type="Texture2D" uid="uid://b85loe2eskeao" path="res://environment/floor_checker.png" id="4_mtpta"]
+[ext_resource type="Script" path="res://game/client_shadow_mesh.gd" id="5_v63ac"]
+[ext_resource type="Script" path="res://game/camera/camera.gd" id="6_8iwc4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_esqxs"]
 size = Vector3(40, 1, 40)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m6xn8"]
 albedo_color = Color(0.14902, 0.180392, 0.227451, 1)
-albedo_texture = ExtResource("2_0eoo0")
+albedo_texture = ExtResource("4_mtpta")
 uv1_scale = Vector3(0.5, 0.5, 0.5)
 uv1_triplanar = true
 
@@ -88,8 +88,8 @@ shader_parameter/noise_power = 0.1
 shader_parameter/texture_albedo = SubResource("ViewportTexture_iivpi")
 shader_parameter/noise = SubResource("NoiseTexture2D_ymcof")
 
-[node name="GameServer" type="Node3D"]
-script = ExtResource("1_15v4o")
+[node name="GameWorld" type="Node3D"]
+script = ExtResource("1_oklj1")
 
 [node name="ShadowMapGenerator" type="SubViewport" parent="."]
 disable_3d = true
@@ -107,9 +107,9 @@ color = Color(0, 0, 0, 1)
 [node name="ShadowMapOffsetter" type="Node2D" parent="ShadowMapGenerator"]
 process_priority = 1
 position = Vector2(128, 128)
-script = ExtResource("2_hornx")
+script = ExtResource("2_qvw0n")
 
-[node name="ShadowMap" parent="ShadowMapGenerator/ShadowMapOffsetter" instance=ExtResource("4_tr1mx")]
+[node name="ShadowMap" parent="ShadowMapGenerator/ShadowMapOffsetter" instance=ExtResource("3_4enk1")]
 position = Vector2(128, 128)
 scale = Vector2(8, 8)
 
@@ -135,7 +135,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 
 material_override = SubResource("ShaderMaterial_l2chk")
 mesh = SubResource("QuadMesh_8t7j0")
 skeleton = NodePath("../Camera/Camera3D")
-script = ExtResource("5_uc0ro")
+script = ExtResource("5_v63ac")
 camera_path = NodePath("../Camera")
 
 [node name="ClientShadow2" type="MeshInstance3D" parent="Scene/ClientShadow"]
@@ -154,7 +154,7 @@ skeleton = NodePath("../../Camera/Camera3D")
 
 [node name="Camera" type="Node3D" parent="Scene"]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-script = ExtResource("3_1l3j6")
+script = ExtResource("6_8iwc4")
 
 [node name="Camera3D" type="Camera3D" parent="Scene/Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 90)

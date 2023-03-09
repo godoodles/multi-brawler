@@ -19,8 +19,8 @@ properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/sync = true
 properties/1/path = NodePath(".:id")
-properties/1/spawn = true
-properties/1/sync = false
+properties/1/spawn = false
+properties/1/sync = true
 
 [node name="Player" type="CharacterBody3D" groups=["players"]]
 script = ExtResource("1_ns80y")
