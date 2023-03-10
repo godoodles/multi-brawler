@@ -6,9 +6,6 @@ const EnemyKevinScene	:= preload("res://entities/enemies/kevin/enemy_kevin.tscn"
 @onready var entities := $Entities
 
 func _ready():
-	_e.debug_spawn_single_mob.connect(spawn_mobs.bind(1))
-	_e.debug_spawn_multi_mobs.connect(spawn_mobs)
-	_e.debug_spawn_wave.connect(spawn_wave)
 	if multiplayer.is_server():
 		setup_as_server()
 	
@@ -58,23 +55,3 @@ func del_player(id: int):
 
 func _effect(effect) -> void:
 	entities.add_child(effect, true)
-
-
-func spawn_mobs(amount:int):
-	for i in amount:
-		spawn_mob.rpc_id(1)
-
-
-func spawn_wave(amount:=100):
-	for i in amount:
-		spawn_mob.rpc_id(1)
-		await get_tree().create_timer(0.3).timeout
-
-
-@rpc("any_peer", "call_local")
-func spawn_mob():
-	var mob = EnemyKevinScene.instantiate()
-	mob.position = Vector3(randf_range(-20, 20), 0.0, randf_range(-20, 20))
-	mob.target = entities.get_child(0)
-	mob.effect.connect(_effect.bind())
-	entities.add_child(mob, true)

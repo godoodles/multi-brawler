@@ -1,10 +1,13 @@
 extends Node2D
+class_name ShadowManager
 
-const DynamicRevealerScene : PackedScene = preload("res://game/shadow_map_revealer.tscn")
-const ShadowTile : PackedScene = preload("res://game/shadow_tile.tscn")
-const ShadowTileScript : Script = preload("res://game/shadow_tile.gd")
+const DynamicRevealerScene : PackedScene = preload("res://game/systems/shadow_map_revealer.tscn")
+const ShadowTile : PackedScene = preload("res://game/systems/shadow_tile.tscn")
+const ShadowTileScript : Script = preload("res://game/systems/shadow_tile.gd")
 
 @export var map_snap := 1.0
+
+signal shadow_added(map_pos:Vector2, real_pos:Vector2)
 
 var map_snap_vector := Vector2(map_snap, map_snap)
 var map_reference := {}
@@ -30,7 +33,6 @@ func _on_add_dynamic_revealer(_entity:Node):
 
 func _on_remove_dynamic_revealer(_entity:Node):
 	tracked_revealers.erase(_entity)
-	
 
 
 func _physics_process(_delta):
@@ -45,28 +47,25 @@ func creep_shadow():
 			for mod_pos in [Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP]:
 				var c_pos = shadow_tile.map_pos+mod_pos
 				if not map_reference.has(c_pos):
-					can_fade_out = randf() > 0.9
+					can_fade_out = randf() > 0.8
 			if can_fade_out:
 				shadow_tile.start_fade_in_timer()
 
 
 func reveal_shadow():
 	for tracker in tracked_revealers.values():
-		var check_positions := {}
-		var precision := 32
-		for i in precision:
-			var test_pos = tracker.position + Vector2(tracker.tracker_radius, 0).rotated(((TAU/precision) * i))
-			var check_position = snapped(test_pos, map_snap_vector) / map_snap
-			if not check_positions.has(check_position.y):
-				check_positions[check_position.y] = {"min" : check_position.x, "max" : check_position.x}
-			else:
-				if check_position.x < check_positions[check_position.y].min:
-					check_positions[check_position.y].min = check_position.x
-				if check_position.x > check_positions[check_position.y].max:
-					check_positions[check_position.y].max = check_position.x
-		
-		for y_pos in check_positions.keys():
-			for x_pos in range(check_positions[y_pos].min, check_positions[y_pos].max):
+		var radius : float = floor(tracker.tracker_radius)+0.5
+		var center : Vector2 = snapped(tracker.position, map_snap_vector)
+		var circle_border_positions := {}
+		for r in floor(radius * sqrt(0.5))+1:
+			var d : int = floor(sqrt(radius*radius - r*r))
+			circle_border_positions[center.y + r] = { "min": center.x - d, "max": center.x + d}
+			circle_border_positions[center.y - r] = { "min": center.x - d, "max": center.x + d}
+			circle_border_positions[center.y + d] = { "min": center.x - r, "max": center.x + r}
+			circle_border_positions[center.y - d] = { "min": center.x - r, "max": center.x + r}
+
+		for y_pos in circle_border_positions.keys():
+			for x_pos in range(circle_border_positions[y_pos].min, circle_border_positions[y_pos].max):
 				if not map_reference.has(Vector2(x_pos, y_pos)):
 					place_shadow_tile(Vector2(x_pos, y_pos))
 
@@ -75,11 +74,13 @@ func place_shadow_tile(map_pos:Vector2):
 	var new_shadowtile = ShadowTile.instantiate()
 	map_reference[map_pos] = new_shadowtile
 	new_shadowtile.map_pos = map_pos
-	new_shadowtile.position = (map_pos * map_snap) + Vector2(map_snap/2, 0)
+	var real_pos : Vector2 = (map_pos * map_snap) + Vector2(map_snap/2, 0)
+	new_shadowtile.position = real_pos
 	shadow_tiles.add_child(new_shadowtile)
-	new_shadowtile.tree_exited.connect(remove_from_map_reference.bind(map_pos))
+	new_shadowtile.tree_exited.connect(remove_from_map_reference.bind(map_pos, real_pos))
 	new_shadowtile.reveal()
 
 
-func remove_from_map_reference(map_pos:Vector2):
+func remove_from_map_reference(map_pos:Vector2, real_pos:Vector2):
+	emit_signal("shadow_added", map_pos, real_pos)
 	map_reference.erase(map_pos)

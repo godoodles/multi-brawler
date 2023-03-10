@@ -34,6 +34,7 @@ func process_active(delta: float) -> void:
 	active_t -= delta
 	if active_t <= 0:
 		complete()
+
 # Default behavior that can be overriden completely depending on how the player needs to behave in this state
 func _process_active(delta: float) -> void:
 	player.process_movement(delta)

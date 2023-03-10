@@ -20,7 +20,7 @@ func reveal():
 	fade_in_timer.stop()
 	emit_signal("stop_tween")
 	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 1, 0.15).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
+	tween.tween_property(self, "modulate:a", 1, 0.25)
 
 
 func start_fadein():

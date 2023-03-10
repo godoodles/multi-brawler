@@ -1,6 +1,16 @@
 extends MarginContainer
 
 
+func _ready():
+	_e.game_connected.connect(hide_debug_buttons)
+
+
+func hide_debug_buttons():
+	$PanelContainer/TopMenu/AddMobButton.hide()
+	$PanelContainer/TopMenu/AddHundredMobsButton.hide()
+	$PanelContainer/TopMenu/StartWaveButton.hide()
+
+
 func _on_host_button_pressed():
 	_e.emit_signal("game_host")
 

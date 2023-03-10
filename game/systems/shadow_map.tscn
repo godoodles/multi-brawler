@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dnxsp8bmabpxm"]
+[gd_scene load_steps=2 format=3 uid="uid://dqs0k2sw85qhy"]
 
-[ext_resource type="Script" path="res://game/map_shadow_generator.gd" id="1_eayh6"]
+[ext_resource type="Script" path="res://game/systems/map_shadow_generator.gd" id="1_eayh6"]
 
 [node name="ShadowMap" type="Node2D"]
 script = ExtResource("1_eayh6")

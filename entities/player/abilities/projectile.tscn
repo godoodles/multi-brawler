@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://dd22t2guaxhef"]
 
 [ext_resource type="Script" path="res://entities/player/abilities/ability_attack.gd" id="1_jxt4c"]
 [ext_resource type="PackedScene" path="res://entities/player/abilities/ability_effects/projectile/projectile.tscn" id="2_a3lxu"]
@@ -6,7 +6,6 @@
 
 [node name="ability_projectile" type="Node3D"]
 script = ExtResource("1_jxt4c")
-reload_duration = 0.5
 effect = ExtResource("2_a3lxu")
 slot = 2
 

@@ -4,7 +4,9 @@ extends Marker3D
 enum Type { 
 	hand,
 	leg,
-	carry
+	carry,
+	body,
+	head
 }
 
 @export var type:Type

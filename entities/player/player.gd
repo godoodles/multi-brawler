@@ -56,13 +56,15 @@ var velocity_v: float:
 
 func _ready() -> void:
 	%HealthLabel.text = str(health)
-	#equip_attack(preload("res://player/abilities/projectile.tscn").instantiate())
+	#equip(preload("res://entities/player/abilities/projectile.tscn").instantiate())
 	equip(preload("res://entities/player/abilities/slash.tscn").instantiate())
-	equip(preload("res://entities/player/abilities/hand_of_metal.tscn").instantiate())
-	equip(preload("res://entities/player/abilities/hand_of_metal.tscn").instantiate())
-	equip(preload("res://entities/player/abilities/projectile.tscn").instantiate())
-	equip(preload("res://entities/player/abilities/metal_foot.tscn").instantiate())
-	#equip_attack(preload("res://player/abilities/slash.tscn").instantiate())
+	equip(preload("res://entities/player/abilities/hands/hand_of_normality.tscn").instantiate())
+	equip(preload("res://entities/player/abilities/hands/hand_of_normality.tscn").instantiate())
+	equip(preload("res://entities/player/abilities/legs/fast_legs.tscn").instantiate())
+	equip(preload("res://entities/player/abilities/legs/fast_legs.tscn").instantiate())
+	equip(preload("res://entities/player/abilities/heads/head_of_normality.tscn").instantiate())
+	equip(preload("res://entities/player/abilities/bodies/body_of_normality.tscn").instantiate())
+	
 	#set_ability_special(load("res://player/ability_special_explosion.gd").new())
 	#set_ability_dodge(load("res://player/ability_dodge_dash.gd").new())
 #	set_ability_dodge(load("res://player/ability_dodge_jump.gd").new())
@@ -89,6 +91,10 @@ func _physics_process(delta):
 	velocity_v -= 30.0 * delta
 	
 	move_and_slide()
+	
+	var anim = "idle" if velocity_v <= 10.0 else "run"
+	if $AnimationPlayer.current_animation != anim:
+		$AnimationPlayer.play(anim)
 
 
 func process_movement(delta, speed := -1.0, accel := -1.0, decel := -1.0):

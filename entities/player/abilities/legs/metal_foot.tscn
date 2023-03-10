@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyfxm6d3d2pv"]
+
+[ext_resource type="Script" path="res://entities/player/abilities/ability.gd" id="1_bqb4t"]
+[ext_resource type="Texture2D" uid="uid://bxkkobv753dog" path="res://assets/characters/player/skelly/leg_0.png" id="2_1f03e"]
+
+[node name="metal_foot" type="Node3D"]
+script = ExtResource("1_bqb4t")
+slot = 1
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+pixel_size = 0.005
+render_priority = 1
+texture = ExtResource("2_1f03e")

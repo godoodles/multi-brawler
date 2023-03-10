@@ -1,0 +1,288 @@
+[gd_scene load_steps=30 format=3 uid="uid://bvifv23v2x0lx"]
+
+[ext_resource type="Script" path="res://game/levels/game_world.gd" id="1_cup00"]
+[ext_resource type="Script" path="res://game/systems/shadow_map_offsetter.gd" id="2_5fwuk"]
+[ext_resource type="PackedScene" uid="uid://dqs0k2sw85qhy" path="res://game/systems/shadow_map.tscn" id="3_f0w4b"]
+[ext_resource type="Texture2D" uid="uid://drccppqb368s1" path="res://assets/environment/ground_grass_displace.png" id="4_fpw3d"]
+[ext_resource type="Texture2D" uid="uid://qmvmqqd0h00m" path="res://assets/environment/ground_stones.png" id="4_qgjfi"]
+[ext_resource type="Script" path="res://game/systems/client_shadow_mesh.gd" id="5_ndyw2"]
+[ext_resource type="Script" path="res://game/systems/enemy_spawn_system.gd" id="6_furag"]
+[ext_resource type="Script" path="res://game/camera/camera.gd" id="6_rjwvm"]
+
+[sub_resource type="Shader" id="Shader_q6d7j"]
+code = "shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+
+uniform vec4 albedo : source_color;
+uniform sampler2D noise_texture : source_color,filter_linear_mipmap,repeat_enable;
+uniform sampler2D albedo_gradient : source_color;
+uniform sampler2D ground_displace : source_color;
+uniform float ground_displace_power = 0.9;
+uniform vec2 ground_displace_uv_scale = vec2(200.0);
+uniform vec2 uv_scale;
+
+uniform sampler2D stones_map  : source_color;
+uniform sampler2D stones_albedo_gradient : source_color;
+uniform vec2 stones_uv_scale = vec2(150.0);
+
+
+void fragment() {
+	SPECULAR = 0.0;
+	
+	// Let's add some small pebbles
+	vec3 stones_tex = texture(stones_map, UV*stones_uv_scale).rgb;
+	vec4 stones_albedo_tex = vec4(texture(stones_albedo_gradient, vec2(stones_tex.r, 0.0)).rgb, stones_tex.b);
+	
+	// This is the ground part, dirt and grass
+	float noise_pan = texture(noise_texture, (TIME*vec2(0.02, 0.0))+UV*20.0).r*0.1;
+	float ground_displace_val = texture(ground_displace, vec2(noise_pan, 0.0)+UV*ground_displace_uv_scale).r * ground_displace_power;
+	vec2 noise_val = texture(noise_texture, UV*uv_scale).rg*0.9 + texture(noise_texture, UV*uv_scale*20.0).rg*0.1;
+	float stone_borders = texture(stones_map, (UV*stones_uv_scale) + (noise_val-0.5)*0.02).g;
+	float albedo_power = clamp(ground_displace_val + noise_val.r - stone_borders, 0.01, 0.99);
+	ALBEDO = albedo.rgb * texture(albedo_gradient, vec2(albedo_power, 0.0)).rgb;
+	ALBEDO = mix(ALBEDO, stones_albedo_tex.rgb, stones_albedo_tex.a);
+}
+"
+
+[sub_resource type="Gradient" id="Gradient_5j2e0"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.31746, 0.637566)
+colors = PackedColorArray(0.8, 0.8, 0.8, 1, 0.85, 0.85, 0.85, 1, 0.9, 0.9, 0.9, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_m01tu"]
+gradient = SubResource("Gradient_5j2e0")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ss41b"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_06obi"]
+seamless = true
+seamless_blend_skirt = 0.25
+noise = SubResource("FastNoiseLite_ss41b")
+
+[sub_resource type="Gradient" id="Gradient_22g44"]
+colors = PackedColorArray(0.175781, 0.140671, 0.110669, 1, 0.304688, 0.289605, 0.277266, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ifvx3"]
+gradient = SubResource("Gradient_22g44")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h2p08"]
+render_priority = 0
+shader = SubResource("Shader_q6d7j")
+shader_parameter/albedo = Color(0.282353, 0.203922, 0.156863, 1)
+shader_parameter/ground_displace_power = 1.0
+shader_parameter/ground_displace_uv_scale = Vector2(200, 150)
+shader_parameter/uv_scale = Vector2(20, 15)
+shader_parameter/stones_uv_scale = Vector2(150, 120)
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_06obi")
+shader_parameter/albedo_gradient = SubResource("GradientTexture1D_m01tu")
+shader_parameter/ground_displace = ExtResource("4_fpw3d")
+shader_parameter/stones_map = ExtResource("4_qgjfi")
+shader_parameter/stones_albedo_gradient = SubResource("GradientTexture1D_ifvx3")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rehie"]
+size = Vector2(2000, 2000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_esqxs"]
+size = Vector3(2000, 4, 2000)
+
+[sub_resource type="Shader" id="Shader_mpj3c"]
+code = "shader_type spatial;
+render_mode unshaded, depth_draw_opaque;
+
+uniform sampler2D texture_albedo;
+uniform sampler2D noise;
+uniform vec4 fog_color : source_color;
+uniform vec2 initial_noise_offset = vec2(0.0, 0.0);
+uniform float alpha = 0.5;
+uniform float noise_power = 0.1;
+
+
+void fragment() {
+	vec2 world_pos = vec2(NODE_POSITION_WORLD.x, NODE_POSITION_WORLD.z) / 32.0;
+	float noise_tex_1 = texture(noise, initial_noise_offset+vec2(0.66)+UV+(TIME*vec2(0.1, 0.02))+world_pos).r;
+	float noise_tex_2 = texture(noise, initial_noise_offset+           UV-(TIME*vec2(0.01, -0.04))+world_pos).g;
+	float noise_tex_3 = texture(noise, initial_noise_offset+vec2(0.33)+UV+(TIME*vec2(-0.05, -0.04))+world_pos).b;
+	float noise_combined = ((noise_tex_1 + noise_tex_2 + noise_tex_3)/3.0)-0.5;
+	vec4 albedo_tex = texture(texture_albedo, UV+noise_combined*noise_power);
+	ALBEDO = fog_color.rgb;
+	ALPHA = smoothstep(0.0, 0.05, abs(1.0-albedo_tex.g)) * alpha;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_afwkr"]
+noise_type = 3
+frequency = 0.015
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ymcof"]
+width = 256
+height = 256
+generate_mipmaps = false
+seamless = true
+noise = SubResource("FastNoiseLite_afwkr")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_iivpi"]
+viewport_path = NodePath("ShadowMapGenerator")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l2chk"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_mpj3c")
+shader_parameter/fog_color = Color(0.0392157, 0.0470588, 0.0509804, 1)
+shader_parameter/initial_noise_offset = Vector2(0, 0)
+shader_parameter/alpha = 1.0
+shader_parameter/noise_power = 0.05
+shader_parameter/texture_albedo = SubResource("ViewportTexture_iivpi")
+shader_parameter/noise = SubResource("NoiseTexture2D_ymcof")
+
+[sub_resource type="QuadMesh" id="QuadMesh_8t7j0"]
+size = Vector2(32, 32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0luvl"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_mpj3c")
+shader_parameter/fog_color = Color(0.0392157, 0.0470588, 0.0509804, 1)
+shader_parameter/initial_noise_offset = Vector2(0.3, 0.3)
+shader_parameter/alpha = 0.7
+shader_parameter/noise_power = 0.05
+shader_parameter/texture_albedo = SubResource("ViewportTexture_iivpi")
+shader_parameter/noise = SubResource("NoiseTexture2D_ymcof")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t5bnk"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_mpj3c")
+shader_parameter/fog_color = Color(0.0392157, 0.0470588, 0.0509804, 1)
+shader_parameter/initial_noise_offset = Vector2(0.6, 0.6)
+shader_parameter/alpha = 0.5
+shader_parameter/noise_power = 0.1
+shader_parameter/texture_albedo = SubResource("ViewportTexture_iivpi")
+shader_parameter/noise = SubResource("NoiseTexture2D_ymcof")
+
+[sub_resource type="Gradient" id="Gradient_82dpv"]
+offsets = PackedFloat32Array(0, 0.131841, 0.860696, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.076675, 0.139919, 0.167969, 1, 0.866494, 0.816658, 0.740574, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ne12u"]
+gradient = SubResource("Gradient_82dpv")
+
+[sub_resource type="Environment" id="Environment_0jj7s"]
+background_mode = 1
+ambient_light_source = 1
+reflected_light_source = 1
+tonemap_mode = 2
+glow_enabled = true
+glow_levels/1 = 0.3
+glow_levels/2 = 0.5
+glow_levels/3 = 0.7
+glow_levels/4 = 1.0
+glow_levels/5 = 0.5
+glow_intensity = 0.07
+glow_blend_mode = 1
+fog_light_energy = 2.0
+fog_density = 0.0
+fog_height = 1.0
+fog_height_density = 0.05
+volumetric_fog_density = 0.01
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture1D_ne12u")
+
+[node name="GameWorld" type="Node3D"]
+script = ExtResource("1_cup00")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://entities/player/player.tscn", "res://entities/enemies/kevin/enemy_kevin.tscn")
+spawn_path = NodePath("../Entities")
+
+[node name="ShadowMapGenerator" type="SubViewport" parent="."]
+disable_3d = true
+handle_input_locally = false
+gui_snap_controls_to_pixels = false
+size = Vector2i(256, 256)
+size_2d_override = Vector2i(256, 256)
+
+[node name="ColorRect" type="ColorRect" parent="ShadowMapGenerator"]
+custom_minimum_size = Vector2(1024, 1024)
+offset_right = 24000.0
+offset_bottom = 24000.0
+color = Color(0, 0, 0, 1)
+
+[node name="ShadowMapOffsetter" type="Node2D" parent="ShadowMapGenerator"]
+process_priority = 1
+position = Vector2(128, 128)
+script = ExtResource("2_5fwuk")
+
+[node name="ShadowManager" parent="ShadowMapGenerator/ShadowMapOffsetter" instance=ExtResource("3_f0w4b")]
+scale = Vector2(8, 8)
+
+[node name="Map" type="Node3D" parent="."]
+
+[node name="Ground" type="StaticBody3D" parent="Map"]
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Map/Ground"]
+material_override = SubResource("ShaderMaterial_h2p08")
+mesh = SubResource("PlaneMesh_rehie")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+shape = SubResource("BoxShape3D_esqxs")
+
+[node name="Objects" type="Node3D" parent="Map"]
+
+[node name="Entities" type="Node3D" parent="."]
+
+[node name="Spawners" type="Node3D" parent="."]
+script = ExtResource("6_furag")
+shadow_manager_path = NodePath("../ShadowMapGenerator/ShadowMapOffsetter/ShadowManager")
+entities_path = NodePath("../Entities")
+
+[node name="EnemyFogSpawner" type="MultiplayerSpawner" parent="Spawners"]
+_spawnable_scenes = PackedStringArray("res://game/systems/enemy_fog_spawner.tscn")
+spawn_path = NodePath("..")
+
+[node name="Scene" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Scene"]
+transform = Transform3D(-0.5, -0.75, 0.433013, 0, 0.5, 0.866025, -0.866025, 0.433013, -0.25, 0, 3.85936, 0)
+light_color = Color(0.780392, 1, 0.976471, 1)
+light_energy = 0.6
+shadow_blur = 2.0
+
+[node name="ClientShadow" type="MeshInstance3D" parent="Scene"]
+process_priority = 1
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0)
+material_override = SubResource("ShaderMaterial_l2chk")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_8t7j0")
+skeleton = NodePath("../Camera/Camera3D")
+script = ExtResource("5_ndyw2")
+camera_path = NodePath("../Camera")
+
+[node name="ClientShadow2" type="MeshInstance3D" parent="Scene/ClientShadow"]
+process_priority = 1
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0, -0.3)
+material_override = SubResource("ShaderMaterial_0luvl")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_8t7j0")
+skeleton = NodePath("../../Camera/Camera3D")
+
+[node name="ClientShadow3" type="MeshInstance3D" parent="Scene/ClientShadow"]
+process_priority = 1
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, -0.6)
+material_override = SubResource("ShaderMaterial_t5bnk")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_8t7j0")
+skeleton = NodePath("../../Camera/Camera3D")
+
+[node name="Camera" type="Node3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+script = ExtResource("6_rjwvm")
+
+[node name="Camera3D" type="Camera3D" parent="Scene/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
+current = true
+fov = 8.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0jj7s")

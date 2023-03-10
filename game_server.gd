@@ -1,7 +1,7 @@
 # multiplayer.gd
 extends Node
 
-var GameWorldScene := preload("res://game_world.tscn")
+var GameWorldScene := preload("res://game/levels/game_world.tscn")
 
 var server := "127.0.0.1"
 var port = 4434 if OS.get_environment("GODOT_PORT").is_empty() else int(OS.get_environment("GODOT_PORT"))
@@ -56,7 +56,6 @@ func start_game():
 
 
 func start_as_server() -> bool:
-	print("Start as Server")
 	get_window().title = "Brawler - SERVER"
 	# Start as server.
 	var peer = ENetMultiplayerPeer.new()
@@ -71,7 +70,6 @@ func start_as_server() -> bool:
 
 
 func start_as_client():
-	print("Start as Client")
 	get_window().title = "Brawler - CLIENT"
 	# Start as client.
 	if server == "":
@@ -82,6 +80,7 @@ func start_as_client():
 		return
 	
 	multiplayer.multiplayer_peer = peer
+	_e.emit_signal("game_connected")
 	start_game()
 
 

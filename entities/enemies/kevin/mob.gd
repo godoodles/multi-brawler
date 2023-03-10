@@ -66,6 +66,7 @@ func knock_back(force:Vector3) -> void:
 		remove_from_group("mobs")
 		hit_tween.finished.connect(Callable($Sprite3D, "set_modulate").bind(Color.DIM_GRAY))
 
+
 func set_process_and_slots_process(value:bool) -> void:
 	set_physics_process(false)
 	for child in $Slot.get_children():

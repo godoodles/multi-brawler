@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqybioealhdhu"]
+[gd_scene load_steps=4 format=3 uid="uid://p4x8l344hqr8"]
 
-[ext_resource type="Script" path="res://game/shadow_map_revealer.gd" id="1_ln8bk"]
+[ext_resource type="Script" path="res://game/systems/shadow_map_revealer.gd" id="1_ln8bk"]
 [ext_resource type="Texture2D" uid="uid://crhlwaqfsf55b" path="res://icon.svg" id="2_xk3uw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ib3ar"]
@@ -13,10 +13,12 @@ collision_mask = 256
 script = ExtResource("1_ln8bk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+modulate = Color(1, 1, 1, 0)
 shape = SubResource("CircleShape2D_ib3ar")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="DebugSprite" type="Sprite2D" parent="."]
 visible = false
+modulate = Color(0, 0, 0, 1)
 scale = Vector2(0.01, 0.01)
 texture = ExtResource("2_xk3uw")
 

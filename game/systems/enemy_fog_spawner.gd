@@ -1,0 +1,26 @@
+extends Node3D
+
+signal spawn_enemy(_enemy_scene:PackedScene)
+
+var enemy_scene : PackedScene = null
+var triggered := false
+
+func _enter_tree():
+	$Effect.scale = Vector3.ZERO
+
+func _ready():
+	var tween = create_tween()
+	tween.tween_property($Effect, "scale", Vector3.ONE, 1).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+
+
+func trigger():
+	var tween = create_tween()
+	tween.tween_property($Effect, "scale", Vector3.ZERO, 0.1).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+	tween.set_parallel(true).tween_callback(queue_free).set_delay(0.1)
+
+func _on_area_entered(area):
+	if triggered:
+		return
+	triggered = true
+	trigger()
+	emit_signal("spawn_enemy", enemy_scene, position)
