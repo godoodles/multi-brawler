@@ -10,7 +10,7 @@ func _enter_tree():
 
 func _ready():
 	var tween = create_tween()
-	tween.tween_property($Effect, "scale", Vector3.ONE, 1).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+	tween.tween_property($Effect, "scale", Vector3.ONE*randf_range(0.8, 1.0), 1).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
 
 
 func trigger():

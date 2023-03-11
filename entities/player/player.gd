@@ -9,6 +9,7 @@ extends CharacterBody3D
 @export var slots :Array[NodePath] = []
 
 @onready var controller: Controller = $Controller
+@onready var anim: AnimationPlayer = $AnimationPlayer
 
 @export var movement_speed := 5.0
 var movement_accel := 20.0
@@ -55,6 +56,8 @@ var velocity_v: float:
 
 
 func _ready() -> void:
+	if id == multiplayer.get_unique_id():
+		$PlayerColor.hide()
 	%HealthLabel.text = str(health)
 	#equip(preload("res://entities/player/abilities/projectile.tscn").instantiate())
 	equip(preload("res://entities/player/abilities/slash.tscn").instantiate())
@@ -91,10 +94,15 @@ func _physics_process(delta):
 	velocity_v -= 30.0 * delta
 	
 	move_and_slide()
+	control_animation()
+
+
+func control_animation():
+	var anim_play = "idle" if (velocity_h.length() <= 1.0 or controller.get_direction().length() < 0.1) else "run"
+	if anim.current_animation != anim_play:
+		anim.play(anim_play)
+	$Body.scale.x = 1 if sign(velocity_h.x) == -1 else -1
 	
-	var anim = "idle" if velocity_v <= 10.0 else "run"
-	if $AnimationPlayer.current_animation != anim:
-		$AnimationPlayer.play(anim)
 
 
 func process_movement(delta, speed := -1.0, accel := -1.0, decel := -1.0):

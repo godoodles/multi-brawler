@@ -82,5 +82,6 @@ func place_shadow_tile(map_pos:Vector2):
 
 
 func remove_from_map_reference(map_pos:Vector2, real_pos:Vector2):
-	emit_signal("shadow_added", map_pos, real_pos)
+	if multiplayer.is_server():
+		emit_signal("shadow_added", map_pos, real_pos)
 	map_reference.erase(map_pos)

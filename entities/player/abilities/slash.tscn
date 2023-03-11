@@ -7,11 +7,12 @@
 [node name="slash" type="Node3D"]
 transform = Transform3D(0.999861, 0.0166846, 0, -0.0166846, 0.999861, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_nodu4")
+attack_range = 3.0
 effect = ExtResource("2_c0j8d")
 slot = 2
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(-0.214045, 0.976497, 0.0252716, -0.0227501, 0.0208808, -0.999524, -0.976562, -0.214517, 0.0177459, 1.3822, 0.0803, -0.0445422)
 pixel_size = 0.005
-alpha_cut = 1
+alpha_cut = 2
 texture = ExtResource("3_hxns1")
