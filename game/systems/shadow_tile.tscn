@@ -1,10 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://blc8ltc7a4ttf"]
+[gd_scene load_steps=5 format=3 uid="uid://blc8ltc7a4ttf"]
 
 [ext_resource type="Script" path="res://game/systems/shadow_tile.gd" id="1_22rfv"]
 [ext_resource type="Texture2D" uid="uid://p7a5gl388r8m" path="res://assets/generic/shadow_mask.png" id="2_6hf8n"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_e1qs2"]
 radius = 0.4
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_vcpof"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = false
+properties/1/path = NodePath(".:map_pos")
+properties/1/spawn = true
+properties/1/sync = false
+properties/2/path = NodePath(".:modulate")
+properties/2/spawn = true
+properties/2/sync = false
 
 [node name="ShadowTile" type="Area2D"]
 modulate = Color(1, 1, 1, 0)
@@ -30,5 +41,8 @@ texture = ExtResource("2_6hf8n")
 [node name="FadeInTimer" type="Timer" parent="."]
 wait_time = 0.3
 one_shot = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_vcpof")
 
 [connection signal="timeout" from="FadeInTimer" to="." method="_on_fade_in_timer_timeout"]

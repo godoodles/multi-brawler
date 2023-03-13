@@ -16,7 +16,8 @@ func _ready():
 func trigger():
 	var tween = create_tween()
 	tween.tween_property($Effect, "scale", Vector3.ZERO, 0.1).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
-	tween.set_parallel(true).tween_callback(queue_free).set_delay(0.1)
+	if multiplayer.is_server():
+		tween.set_parallel(true).tween_callback(queue_free).set_delay(0.1)
 
 func _on_area_entered(area):
 	if triggered:

@@ -21,7 +21,6 @@ var tracked_revealers := {}
 func _ready():
 	_e.shadow_add_dynamic_revealer.connect(_on_add_dynamic_revealer)
 
-
 func _on_add_dynamic_revealer(_entity:Node):
 	var new_revealer := DynamicRevealerScene.instantiate()
 	new_revealer.tracked_entity = _entity
@@ -36,9 +35,9 @@ func _on_remove_dynamic_revealer(_entity:Node):
 
 
 func _physics_process(_delta):
-	reveal_shadow()
-	creep_shadow()
-
+	if multiplayer.is_server():
+		reveal_shadow()
+		creep_shadow()
 
 func creep_shadow():
 	for shadow_tile in map_reference.values():
@@ -49,8 +48,7 @@ func creep_shadow():
 				if not map_reference.has(c_pos):
 					can_fade_out = randf() > 0.8
 			if can_fade_out:
-				shadow_tile.start_fade_in_timer()
-
+				shadow_tile.start_fade_in_timer.rpc()
 
 func reveal_shadow():
 	for tracker in tracked_revealers.values():
@@ -69,14 +67,13 @@ func reveal_shadow():
 				if not map_reference.has(Vector2(x_pos, y_pos)):
 					place_shadow_tile(Vector2(x_pos, y_pos))
 
-
 func place_shadow_tile(map_pos:Vector2):
 	var new_shadowtile = ShadowTile.instantiate()
 	map_reference[map_pos] = new_shadowtile
 	new_shadowtile.map_pos = map_pos
 	var real_pos : Vector2 = (map_pos * map_snap) + Vector2(map_snap/2, 0)
 	new_shadowtile.position = real_pos
-	shadow_tiles.add_child(new_shadowtile)
+	shadow_tiles.add_child(new_shadowtile, true)
 	new_shadowtile.tree_exited.connect(remove_from_map_reference.bind(map_pos, real_pos))
 	new_shadowtile.reveal()
 
