@@ -101,9 +101,8 @@ func control_animation():
 	var anim_play = "idle" if (velocity_h.length() <= 1.0 or controller.get_direction().length() < 0.1) else "run"
 	if anim.current_animation != anim_play:
 		anim.play(anim_play)
-	$Body.scale.x = 1 if sign(velocity_h.x) == -1 else -1
-	
-
+	if not is_zero_approx(velocity_h.x):
+		$Body.scale.x = 1 if sign(velocity_h.x) == -1 else -1
 
 func process_movement(delta, speed := -1.0, accel := -1.0, decel := -1.0):
 	if speed == -1.0: speed = movement_speed
