@@ -103,4 +103,5 @@ toggle_console={
 [layer_names]
 
 3d_physics/layer_3="EnemySpawns"
+3d_physics/layer_4="PlayerPickupReach"
 2d_physics/layer_9="ShadowTile"

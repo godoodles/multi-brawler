@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://d15y213dr00cq"]
+[gd_scene load_steps=24 format=3 uid="uid://d15y213dr00cq"]
 
 [ext_resource type="Script" path="res://entities/player/player.gd" id="1_ns80y"]
 [ext_resource type="Script" path="res://entities/player/controller.gd" id="3_01wqi"]
@@ -20,19 +20,22 @@ properties/1/sync = false
 height = 3.0
 radius = 8.5
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_65g03"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_tge0h"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sggt5"]
+radius = 3.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ias7w"]
 properties/0/path = NodePath(".:direction")
 properties/0/spawn = false
 properties/0/sync = true
 
-[sub_resource type="Gradient" id="Gradient_uumxa"]
+[sub_resource type="Gradient" id="Gradient_ii2rv"]
 offsets = PackedFloat32Array(0.824666, 1)
 colors = PackedColorArray(0, 0, 0, 0.470588, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_rseym"]
-gradient = SubResource("Gradient_uumxa")
+gradient = SubResource("Gradient_ii2rv")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
@@ -437,7 +440,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.231844)
 shape = SubResource("CylinderShape3D_ii27p")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_65g03")
+shape = SubResource("SphereShape3D_tge0h")
+
+[node name="PickupReach" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PickupReach"]
+shape = SubResource("SphereShape3D_sggt5")
 
 [node name="Body" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0.0365514, 0)

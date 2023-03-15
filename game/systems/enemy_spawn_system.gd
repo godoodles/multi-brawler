@@ -59,8 +59,14 @@ func spawn_mob(_enemy_scene:= EnemyTypeKevin, _spawn_pos:Vector3 = Vector3(randf
 	mob.position.y = 0.5
 	mob.target = get_random_player_target()
 	mob.effect.connect(_effect.bind())
+	mob.died.connect(self._mob_died.bind(mob))
 	entities.add_child(mob, true)
 
 
 func _effect(effect) -> void:
 	entities.add_child(effect, true)
+
+func _mob_died(mob) -> void:
+	var drop = preload("res://entities/drops/drop.tscn").instantiate()
+	drop.position = mob.position
+	entities.add_child(drop)

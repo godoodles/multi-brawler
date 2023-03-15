@@ -1,6 +1,8 @@
 extends Node3D
 class_name ImpactText
 
+signal done
+
 @export var text := ""
 @export var color := Color.WHITE
 @export var hang_time := 0.0
@@ -21,3 +23,5 @@ func _ready() -> void:
 	tween.tween_property($Label3D, "position:y", position.y + 1.5, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property($Label3D, "scale", Vector3.ZERO, 0.8).set_delay(hang_time).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_callback(self.queue_free)
+	tween.tween_callback(self.emit_signal.bind("done"))
+	

@@ -9,6 +9,7 @@ var target:Node3D
 @export var attack_range:int = 1
 
 signal effect
+signal died
 
 var hit_tween:Tween
 
@@ -59,12 +60,13 @@ func knock_back(force:Vector3) -> void:
 	hit_tween.set_parallel(true)
 	hit_tween.tween_property(self, "position", position + force, 0.15)
 	hit_tween.tween_property($Sprite3D, "modulate", Color.WHITE, 0.15)
-	
+
 	if health <= 0:
+		died.emit()
 		hit_tween.tween_property($Sprite3D, "scale", Vector3.ZERO, 0.1).set_delay(0.25)
 		hit_tween.tween_property($ShadowDecal, "scale", Vector3.ONE * 0.01, 0.1).set_delay(0.25)
 		hit_tween.tween_property($Sprite3D, "rotation:z", PI * 2.0, 0.5)
-		hit_tween.tween_property($Sprite3D, "modulate", Color.BLACK, 0.4)
+		#hit_tween.tween_property($Sprite3D, "modulate", Color.BLACK, 0.4)
 	
 	set_process_and_slots_process(false)
 
