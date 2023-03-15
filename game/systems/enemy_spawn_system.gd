@@ -56,6 +56,7 @@ func get_random_player_target() -> Player:
 func spawn_mob(_enemy_scene:= EnemyTypeKevin, _spawn_pos:Vector3 = Vector3(randf_range(-20, 20), 0.0, randf_range(-20, 20))):
 	var mob = _enemy_scene.instantiate()
 	mob.position = _spawn_pos
+	mob.position.y = 0.5
 	mob.target = get_random_player_target()
 	mob.effect.connect(_effect.bind())
 	entities.add_child(mob, true)

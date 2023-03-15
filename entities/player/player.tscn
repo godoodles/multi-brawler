@@ -1,9 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://d15y213dr00cq"]
+[gd_scene load_steps=23 format=3 uid="uid://d15y213dr00cq"]
 
 [ext_resource type="Script" path="res://entities/player/player.gd" id="1_ns80y"]
 [ext_resource type="Script" path="res://entities/player/controller.gd" id="3_01wqi"]
 [ext_resource type="Script" path="res://entities/player/player_input.gd" id="4_40ji2"]
 [ext_resource type="Script" path="res://entities/player/slot.gd" id="5_eo1rk"]
+[ext_resource type="Shader" path="res://entities/player/hit.gdshader" id="6_7cuxx"]
+[ext_resource type="Script" path="res://entities/player/hit_meter.gd" id="6_neqh6"]
 [ext_resource type="Script" path="res://entities/player/remote_transform_slot.gd" id="6_t123e"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yu6in"]
@@ -404,6 +406,18 @@ _data = {
 "run": SubResource("Animation_7jh7s")
 }
 
+[sub_resource type="Curve" id="Curve_raqlv"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0286458, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_oub3i"]
+curve = SubResource("Curve_raqlv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m8fu2"]
+shader = ExtResource("6_7cuxx")
+shader_parameter/ttl = 1.0
+shader_parameter/curve = SubResource("CurveTexture_oub3i")
+
 [node name="Player" type="CharacterBody3D" groups=["players"]]
 script = ExtResource("1_ns80y")
 attack_speed = 0
@@ -521,6 +535,21 @@ speed_scale = 1.3
 libraries = {
 "": SubResource("AnimationLibrary_nb41i")
 }
+
+[node name="HitMeter" type="CanvasLayer" parent="."]
+script = ExtResource("6_neqh6")
+
+[node name="ColorRect" type="ColorRect" parent="HitMeter"]
+material = SubResource("ShaderMaterial_m8fu2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.486275)
+
+[node name="HitCooldown" type="Timer" parent="."]
+one_shot = true
 
 [connection signal="child_entered_tree" from="Weapons/HandRight" to="Weapons/HandRight/carry/RemoteTransform3D" method="_child_entered_tree"]
 [connection signal="child_entered_tree" from="Weapons/HandLeft" to="Weapons/HandLeft/carry/RemoteTransform3D2" method="_child_entered_tree"]

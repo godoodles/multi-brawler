@@ -27,6 +27,7 @@ signal effect
 		$Controller/PlayerInput.set_multiplayer_authority(id)
 
 @onready var input = $Controller/PlayerInput
+@onready var hit_cooldown = $HitCooldown
 
 var position_h: Vector2:
 	get:
@@ -112,8 +113,16 @@ func process_movement(delta, speed := -1.0, accel := -1.0, decel := -1.0):
 	var weight := accel if target_velocity_h.length() > 0.5 else decel
 	velocity_h = lerp(velocity_h, target_velocity_h, weight * delta)
 
-
 @rpc("call_local")
 func hit(from, _server_global_position:Vector3 = global_position):
+	if hit_cooldown.time_left > 0:
+		return
+
+	hit_cooldown.start(0.5)
+
 	health -= from.damage
-	%HealthLabel.text = str(health)
+
+	ImpactText.popin(self, str(-from.damage), Color.RED).hang_time = 1.0
+
+	if id == multiplayer.get_unique_id():
+		$HitMeter.hit()

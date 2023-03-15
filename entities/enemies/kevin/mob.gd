@@ -39,6 +39,8 @@ func hit(from, server_global_position:Vector3 = global_position):
 	health -= from.damage
 	flash()
 	knock_back(from.velocity.normalized() * from.knockback)
+	
+	ImpactText.popin(self, str(from.damage))
 
 func flash(_duration := 0.1):
 	$Sprite3D.modulate = Color.CORAL
@@ -51,12 +53,19 @@ func knock_back(force:Vector3) -> void:
 	force.y = 0.0
 	
 	if health <= 0:
-		force *= 2.0
+		force *= 3.0
 
 	hit_tween = create_tween().bind_node(self)
 	hit_tween.set_parallel(true)
 	hit_tween.tween_property(self, "position", position + force, 0.15)
 	hit_tween.tween_property($Sprite3D, "modulate", Color.WHITE, 0.15)
+	
+	if health <= 0:
+		hit_tween.tween_property($Sprite3D, "scale", Vector3.ZERO, 0.1).set_delay(0.25)
+		hit_tween.tween_property($ShadowDecal, "scale", Vector3.ONE * 0.01, 0.1).set_delay(0.25)
+		hit_tween.tween_property($Sprite3D, "rotation:z", PI * 2.0, 0.5)
+		hit_tween.tween_property($Sprite3D, "modulate", Color.BLACK, 0.4)
+	
 	set_process_and_slots_process(false)
 
 	if health > 0:
@@ -64,7 +73,8 @@ func knock_back(force:Vector3) -> void:
 	else:
 		$Area3D.position.y -= 100
 		remove_from_group("mobs")
-		hit_tween.finished.connect(Callable($Sprite3D, "set_modulate").bind(Color.DIM_GRAY))
+		if multiplayer.is_server():
+			hit_tween.finished.connect(self.queue_free)
 
 
 func set_process_and_slots_process(value:bool) -> void:
