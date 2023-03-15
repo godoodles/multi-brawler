@@ -24,4 +24,3 @@ func _ready() -> void:
 	tween.tween_property($Label3D, "scale", Vector3.ZERO, 0.8).set_delay(hang_time).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_callback(self.queue_free)
 	tween.tween_callback(self.emit_signal.bind("done"))
-	

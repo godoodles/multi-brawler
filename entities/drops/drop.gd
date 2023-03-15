@@ -26,10 +26,12 @@ func _area_entered(area) -> void:
 
 func _body_entered(body):
 	if body == lock:
+		set_physics_process(false)
 		$Sprite3D.visible = false
 		$ShadowDecal.visible = false
-		ImpactText.popin(self, "+1", Color.GREEN).connect("done", self.queue_free)
-		set_physics_process(false)
+		var impact_text = ImpactText.popin(self, "+1", Color.GREEN)
+		if multiplayer.is_server():
+			impact_text.connect("done", self.queue_free)
 
 func animate_fall() -> void:
 	create_tween().tween_property($Sprite3D, "position:y", $Sprite3D.position.y, 0.1).set_ease(Tween.EASE_IN)

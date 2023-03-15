@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dcrba05bgk54a"]
+[gd_scene load_steps=7 format=3 uid="uid://dcrba05bgk54a"]
 
 [ext_resource type="Script" path="res://entities/drops/drop.gd" id="1_34g2m"]
 [ext_resource type="Texture2D" uid="uid://dauq2atfo4vw2" path="res://entities/drops/drop.png" id="1_uskp0"]
@@ -14,6 +14,11 @@ gradient = SubResource("Gradient_uumxa")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_alla8"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = false
 
 [node name="drop" type="Node3D"]
 script = ExtResource("1_34g2m")
@@ -34,6 +39,9 @@ texture = ExtResource("1_uskp0")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25)
 size = Vector3(0.9, 0.2, 0.5)
 texture_albedo = SubResource("GradientTexture2D_qkmvc")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_alla8")
 
 [connection signal="area_entered" from="Area3D" to="." method="_area_entered"]
 [connection signal="body_entered" from="Area3D" to="." method="_body_entered"]

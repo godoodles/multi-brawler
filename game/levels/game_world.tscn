@@ -192,7 +192,7 @@ adjustment_color_correction = SubResource("GradientTexture1D_ne12u")
 script = ExtResource("1_cup00")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://entities/player/player.tscn", "res://entities/enemies/kevin/enemy_kevin.tscn", "res://entities/player/abilities/ability_effects/melee/melee.tscn")
+_spawnable_scenes = PackedStringArray("res://entities/player/player.tscn", "res://entities/enemies/kevin/enemy_kevin.tscn", "res://entities/player/abilities/ability_effects/melee/melee.tscn", "res://entities/drops/drop.tscn")
 spawn_path = NodePath("../Entities")
 
 [node name="ShadowMapGenerator" type="SubViewport" parent="."]

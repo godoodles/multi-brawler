@@ -69,4 +69,4 @@ func _effect(effect) -> void:
 func _mob_died(mob) -> void:
 	var drop = preload("res://entities/drops/drop.tscn").instantiate()
 	drop.position = mob.position
-	entities.add_child(drop)
+	entities.add_child(drop, true)
