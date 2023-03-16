@@ -6,6 +6,7 @@ extends CharacterBody3D
 @onready var health = max_health
 @export var attack_speed:int = 1
 @export var attack_range:int = 1
+@export var size := 1.0
 
 @export var slots :Array[NodePath] = []
 
@@ -67,6 +68,8 @@ func _ready() -> void:
 		$PlayerColor.hide()
 	%HealthLabel.text = str(health)
 	
+	scale = Vector3.ONE * size
+	
 	for e in equips:
 		equip(e.instantiate())
 #	equip(preload("res://entities/abilities/punch.tscn").instantiate())
@@ -98,9 +101,17 @@ func _physics_process(delta):
 	control_animation()
 
 func control_animation():
-	var anim_play = "idle" if (velocity_h.length() <= 1.0 or controller.get_direction().length() < 0.1) else "run"
+	var anim_play
+	var anim_speed := 1.0
+	
+	if (velocity_h.length() <= 1.0 or controller.get_direction().length() < 0.1):
+		anim_play = "idle"
+	else:
+		anim_play = "run"
+		anim_speed = movement_speed / 3.5
+	anim_speed /= size
 	if anim.current_animation != anim_play:
-		anim.play(anim_play)
+		anim.play(anim_play, -1, anim_speed)
 	if not is_zero_approx(velocity_h.x):
 		$Body.scale.x = 1 if sign(velocity_h.x) == -1 else -1
 

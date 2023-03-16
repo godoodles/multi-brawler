@@ -8,9 +8,9 @@
 [ext_resource type="PackedScene" path="res://entities/abilities/bodies/body_of_normality.tscn" id="6_snjb7"]
 
 [node name="Enemy" instance=ExtResource("1_11c3m")]
-transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 0, 0, 0)
 max_health = 4
 attack_speed = 0
 attack_range = 0
+size = 1.7
 movement_speed = 3.0
 equips = Array[PackedScene]([ExtResource("2_vjtin"), ExtResource("3_o6s7h"), ExtResource("3_o6s7h"), ExtResource("4_mqac7"), ExtResource("4_mqac7"), ExtResource("5_t5sns"), ExtResource("6_snjb7")])
