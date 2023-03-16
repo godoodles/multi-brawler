@@ -88,3 +88,6 @@ func _exit_tree():
 	if not multiplayer.is_server():
 		return
 	multiplayer.multiplayer_peer = null
+
+func _process(delta: float) -> void:
+	DisplayServer.window_set_title(str("Skeleton Survivors — Godot 4 Multiplayer Demo (", Performance.get_monitor(Performance.TIME_FPS), " FPS)"))
