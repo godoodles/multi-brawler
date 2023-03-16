@@ -1,7 +1,6 @@
 extends Node3D
 
 const PlayerScene		:= preload("res://entities/player/player.tscn")
-const EnemyKevinScene	:= preload("res://entities/enemies/kevin/enemy_kevin.tscn")
 
 @onready var entities := $Entities
 
@@ -23,7 +22,6 @@ func setup_as_server():
 	# Spawn the local player unless this is a dedicated server export.
 	if not DisplayServer.get_name() == "headless":
 		add_player(1)
-
 
 func _exit_tree():
 	multiplayer.peer_connected.disconnect(add_player)

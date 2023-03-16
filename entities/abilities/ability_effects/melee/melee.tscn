@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cnfaqdm6o4osf"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://entities/player/abilities/ability_effects/melee/ability_effect_melee.gd" id="1_iyigw"]
+[ext_resource type="Script" path="res://entities/abilities/ability_effects/melee/ability_effect_melee.gd" id="1_iyigw"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8jmiy"]
 properties/0/path = NodePath(".:emitter")

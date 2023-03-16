@@ -1,7 +1,7 @@
 extends Node3D
 
 const EnemySpawner := preload("res://game/systems/enemy_fog_spawner.tscn")
-const EnemyTypeKevin := preload("res://entities/enemies/kevin/enemy_kevin.tscn")
+const EnemyTypeKevin := preload("res://entities/enemies/kevin/kevin.tscn")
 
 @export_node_path("ShadowManager") var shadow_manager_path
 @export_node_path("Node3D") var entities_path
@@ -40,12 +40,10 @@ func spawn_mobs(amount:int):
 	for i in amount:
 		spawn_mob()
 
-
 func spawn_wave(amount:=100):
 	for i in amount:
 		spawn_mob()
 		await get_tree().create_timer(0.3).timeout
-
 
 func get_random_player_target() -> Player:
 	var all_players : Array = get_tree().get_nodes_in_group("players")
@@ -57,11 +55,10 @@ func spawn_mob(_enemy_scene:= EnemyTypeKevin, _spawn_pos:Vector3 = Vector3(randf
 	var mob = _enemy_scene.instantiate()
 	mob.position = _spawn_pos
 	mob.position.y = 0.5
-	mob.target = get_random_player_target()
 	mob.effect.connect(_effect.bind())
 	mob.died.connect(self._mob_died.bind(mob))
 	entities.add_child(mob, true)
-
+	mob.controller.target = get_random_player_target()
 
 func _effect(effect) -> void:
 	entities.add_child(effect, true)

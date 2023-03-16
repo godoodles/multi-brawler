@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://entities/abilities/ability_attack.gd" id="1_6w5mu"]
+[ext_resource type="PackedScene" path="res://entities/abilities/ability_effects/melee/melee.tscn" id="2_gwynx"]
+
+[node name="Punch" type="Node3D"]
+transform = Transform3D(0.999861, 0.0166846, 0, -0.0166846, 0.999861, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("1_6w5mu")
+attack_damage = 1
+attack_range = 0.5
+attack_reload_duration = 1.0
+effect = ExtResource("2_gwynx")
+group = "players"
+slot = 2
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+pixel_size = 0.005
+alpha_cut = 2

@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://d0y7wgfi2pya8"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://entities/player/abilities/ability.gd" id="1_glt4d"]
+[ext_resource type="Script" path="res://entities/abilities/ability.gd" id="1_glt4d"]
 [ext_resource type="Texture2D" uid="uid://bk2x75am82s7a" path="res://assets/characters/player/hand.png" id="2_fa04p"]
 
 [node name="hand_of_metal" type="Node3D"]

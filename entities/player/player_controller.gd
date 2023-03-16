@@ -1,5 +1,5 @@
-class_name Controller
-extends Node
+class_name PlayerController
+extends Controller
 
 class Key:
 	var _action := ""

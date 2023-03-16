@@ -3,7 +3,7 @@ extends Node3D
 
 @export var slot:Slot.Type
 
-var player: Player
+var player
 
 var active_duration := 0.3
 var cooldown_duration := 0.5

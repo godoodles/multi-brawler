@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://da4xbhmoifbmc"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://entities/player/abilities/ability.gd" id="1_wuutm"]
+[ext_resource type="Script" path="res://entities/abilities/ability.gd" id="1_wuutm"]
 [ext_resource type="Texture2D" uid="uid://ca6ayagbv35td" path="res://assets/characters/player/skelly/hand_0.png" id="2_7kemr"]
 
 [node name="hand_of_normality" type="Node3D"]

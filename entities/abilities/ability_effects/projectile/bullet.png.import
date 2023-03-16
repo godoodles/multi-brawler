@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cipt6c4ia61v0"
-path.s3tc="res://.godot/imported/kevin.png-e3489df4cb60973778b1d604236cb78e.s3tc.ctex"
+uid="uid://cdmra75ofpw1v"
+path.s3tc="res://.godot/imported/bullet.png-51c771dbac01b914e2fad6ea3aed401b.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://entities/enemies/kevin/kevin.png"
-dest_files=["res://.godot/imported/kevin.png-e3489df4cb60973778b1d604236cb78e.s3tc.ctex"]
+source_file="res://entities/abilities/ability_effects/projectile/bullet.png"
+dest_files=["res://.godot/imported/bullet.png-51c771dbac01b914e2fad6ea3aed401b.s3tc.ctex"]
 
 [params]
 

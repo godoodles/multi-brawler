@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" path="res://entities/player/abilities/ability_effects/projectile/ability_effect_projectile.gd" id="1_kl82d"]
-[ext_resource type="Texture2D" uid="uid://cdmra75ofpw1v" path="res://entities/player/abilities/ability_effects/projectile/bullet.png" id="2_wpt6q"]
+[ext_resource type="Script" path="res://entities/abilities/ability_effects/projectile/ability_effect_projectile.gd" id="1_kl82d"]
+[ext_resource type="Texture2D" uid="uid://cdmra75ofpw1v" path="res://entities/abilities/ability_effects/projectile/bullet.png" id="2_wpt6q"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_71axe"]
 properties/0/path = NodePath(".:position")

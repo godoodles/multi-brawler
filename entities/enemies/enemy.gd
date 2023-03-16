@@ -1,6 +1,7 @@
-class_name Player
+class_name Character
 extends CharacterBody3D
 
+@export var is_player := false
 @export var health = 10
 @export var max_health = 10
 @export var attack_speed:int = 1
@@ -15,18 +16,20 @@ extends CharacterBody3D
 var movement_accel := 20.0
 var movement_decel := 30.0
 
-
+var target
 var last_direction := Vector2()
+var hit_tween
 
 signal effect
+signal died
 
 @export var id := 1 :
 	set(value):
 		id = value
 		# Give authority over the player input to the appropriate peer.
-		$Controller/PlayerInput.set_multiplayer_authority(id)
+		if controller.get_child(0) and controller.get_child(0) is MultiplayerSynchronizer:
+			controller.get_child(0).set_multiplayer_authority(id)
 
-@onready var input = $Controller/PlayerInput
 @onready var hit_cooldown = $HitCooldown
 
 var position_h: Vector2:
@@ -57,21 +60,17 @@ var velocity_v: float:
 
 
 func _ready() -> void:
-	if id == multiplayer.get_unique_id():
+	if is_player and id == multiplayer.get_unique_id():
 		$PlayerColor.hide()
 	%HealthLabel.text = str(health)
 
-	equip(preload("res://entities/abilities/slash.tscn").instantiate())
+	equip(preload("res://entities/abilities/punch.tscn").instantiate())
 	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
 	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
 	equip(preload("res://entities/abilities/legs/fast_legs.tscn").instantiate())
 	equip(preload("res://entities/abilities/legs/fast_legs.tscn").instantiate())
-	equip(preload("res://entities/abilities/heads/head_of_normality.tscn").instantiate())
+	equip(preload("res://entities/abilities/heads/head_of_heads.tscn").instantiate())
 	equip(preload("res://entities/abilities/bodies/body_of_normality.tscn").instantiate())
-
-	# Adds itself to the tracked objects for revealing the shadow
-	_e.emit_signal("shadow_add_dynamic_revealer", self)
-
 
 func equip(ability) -> void:
 	ability.player = self
@@ -88,7 +87,7 @@ func _physics_process(delta):
 	process_movement(delta)
 	
 	# Gravity
-	velocity_v -= 30.0 * delta
+	#velocity_v -= 30.0 * delta
 	
 	move_and_slide()
 	control_animation()
@@ -109,15 +108,51 @@ func process_movement(delta, speed := -1.0, accel := -1.0, decel := -1.0):
 	velocity_h = lerp(velocity_h, target_velocity_h, weight * delta)
 
 @rpc("call_local")
-func hit(from, _server_global_position:Vector3 = global_position):
-	if hit_cooldown.time_left > 0:
-		return
-
-	hit_cooldown.start(0.5)
-
+func hit(from, server_global_position:Vector3 = global_position):
+	position = server_global_position
 	health -= from.damage
+	flash()
+	knock_back(from.velocity.normalized() * from.knockback)
+	
+	ImpactText.popin(self, str(from.damage))
 
-	ImpactText.popin(self, str(-from.damage), Color.RED).hang_time = 1.0
+func flash(_duration := 0.1):
+	pass
+	#$Sprite3D.modulate = Color.CORAL
 
-	if id == multiplayer.get_unique_id():
-		$HitMeter.hit()
+func knock_back(force:Vector3) -> void:
+	if hit_tween:
+		hit_tween.kill()
+		
+	force.y = 0.0
+	
+	if health <= 0:
+		force *= 3.0
+
+	hit_tween = create_tween()
+	hit_tween.set_parallel(true)
+	hit_tween.tween_property(self, "position", position + force, 0.15)
+	#hit_tween.tween_property($Sprite3D, "modulate", Color.WHITE, 0.15)
+
+	if health <= 0:
+		died.emit()
+		hit_tween.tween_property($Body, "scale", Vector3.ONE * 0.01, 0.1).set_delay(0.25)
+		hit_tween.tween_property($Weapons, "scale", Vector3.ONE * 0.01, 0.1).set_delay(0.25)
+		hit_tween.tween_property($ShadowDecal, "scale", Vector3.ONE * 0.01, 0.1).set_delay(0.25)
+		hit_tween.tween_property($Body, "rotation:z", PI * 2.0, 0.5)
+		#hit_tween.tween_property($Sprite3D, "modulate", Color.BLACK, 0.4)
+	
+	set_process_and_slots_process(false)
+
+	if health > 0:
+		hit_tween.finished.connect(set_process_and_slots_process.bind(true))
+	else:
+		$CollisionShape3D.position.y -= 100
+		remove_from_group("mobs")
+		if multiplayer.is_server():
+			hit_tween.finished.connect(self.queue_free)
+
+func set_process_and_slots_process(value:bool) -> void:
+	set_physics_process(value)
+	for slot in slots:
+		get_node(slot).propagate_call("set_physics_process", [value])

@@ -1,34 +1,16 @@
-[gd_scene load_steps=24 format=3 uid="uid://dd0lc6renmvpw"]
+[gd_scene load_steps=13 format=3 uid="uid://dfbwpdnvjyxp8"]
 
-[ext_resource type="Script" path="res://entities/player/player.gd" id="1_ns80y"]
-[ext_resource type="Script" path="res://entities/slot.gd" id="2_myi3d"]
-[ext_resource type="Script" path="res://entities/player/player_input.gd" id="4_40ji2"]
-[ext_resource type="Script" path="res://entities/player/player_controller.gd" id="4_i2tw0"]
-[ext_resource type="Shader" path="res://entities/player/hit.gdshader" id="6_7cuxx"]
-[ext_resource type="Script" path="res://entities/player/hit_meter.gd" id="6_neqh6"]
-[ext_resource type="Script" path="res://entities/player/remote_transform_slot.gd" id="6_t123e"]
+[ext_resource type="Script" path="res://entities/enemies/enemy.gd" id="1_jfqqk"]
+[ext_resource type="Script" path="res://entities/slot.gd" id="2_utqwj"]
+[ext_resource type="Script" path="res://entities/player/remote_transform_slot.gd" id="3_nhgfc"]
+[ext_resource type="Script" path="res://entities/enemies/enemy_controller.gd" id="4_6s6fg"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yu6in"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/sync = true
-properties/1/path = NodePath(".:id")
-properties/1/spawn = true
-properties/1/sync = false
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_ii27p"]
-height = 3.0
-radius = 8.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tge0h"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_sggt5"]
-radius = 3.0
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ias7w"]
-properties/0/path = NodePath(".:direction")
-properties/0/spawn = false
-properties/0/sync = true
 
 [sub_resource type="Gradient" id="Gradient_ii2rv"]
 offsets = PackedFloat32Array(0.824666, 1)
@@ -36,18 +18,6 @@ colors = PackedColorArray(0, 0, 0, 0.470588, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_rseym"]
 gradient = SubResource("Gradient_ii2rv")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0)
-
-[sub_resource type="Gradient" id="Gradient_2mpow"]
-offsets = PackedFloat32Array(0.68239, 0.874214, 1)
-colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_shmhc"]
-gradient = SubResource("Gradient_2mpow")
-width = 128
-height = 128
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
@@ -409,62 +379,38 @@ _data = {
 "run": SubResource("Animation_7jh7s")
 }
 
-[sub_resource type="Curve" id="Curve_raqlv"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0286458, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_oub3i"]
-curve = SubResource("Curve_raqlv")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m8fu2"]
-shader = ExtResource("6_7cuxx")
-shader_parameter/ttl = 1.0
-shader_parameter/curve = SubResource("CurveTexture_oub3i")
-
-[node name="Player" type="CharacterBody3D" groups=["players"]]
-script = ExtResource("1_ns80y")
+[node name="Enemy" type="CharacterBody3D" groups=["mobs"]]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_jfqqk")
+health = 1
+max_health = 1
 attack_speed = 0
 attack_range = 0
-slots = Array[NodePath]([NodePath("Weapons/HandRight"), NodePath("Weapons/HandRight/carry"), NodePath("Weapons/HandLeft"), NodePath("Weapons/HandLeft/carry"), NodePath("Body/LegRight"), NodePath("Body/LegLeft"), NodePath("Body/Body/Head"), NodePath("Body/Body")])
-movement_speed = 11.0
+slots = Array[NodePath]([NodePath("Body/Body"), NodePath("Body/Body/Head"), NodePath("Body/LegRight"), NodePath("Body/LegLeft"), NodePath("Weapons/HandRight"), NodePath("Weapons/HandLeft"), NodePath("Weapons/HandRight/carry"), NodePath("Weapons/HandLeft/carry")])
 
 [node name="Sync" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_yu6in")
 
-[node name="Trigger" type="Area3D" parent="."]
-collision_layer = 4
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.231844)
-shape = SubResource("CylinderShape3D_ii27p")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_tge0h")
-
-[node name="PickupReach" type="Area3D" parent="."]
-collision_layer = 8
-collision_mask = 0
-monitoring = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PickupReach"]
-shape = SubResource("SphereShape3D_sggt5")
 
 [node name="Body" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0.0365514, 0)
 
 [node name="Body" type="Marker3D" parent="Body"]
 unique_name_in_owner = true
-script = ExtResource("2_myi3d")
+script = ExtResource("2_utqwj")
 type = 3
 
 [node name="Head" type="Marker3D" parent="Body/Body"]
 unique_name_in_owner = true
 transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0.411, 0.13)
-script = ExtResource("2_myi3d")
+script = ExtResource("2_utqwj")
 type = 4
 
 [node name="UI" type="Node3D" parent="Body"]
+visible = false
 
 [node name="HealthLabel" type="Label3D" parent="Body/UI"]
 unique_name_in_owner = true
@@ -475,13 +421,13 @@ font_size = 64
 [node name="LegRight" type="Marker3D" parent="Body"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.155, -0.316, -0.0618187)
-script = ExtResource("2_myi3d")
+script = ExtResource("2_utqwj")
 type = 1
 
 [node name="LegLeft" type="Marker3D" parent="Body"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.154562, -0.315863, -0.0623065)
-script = ExtResource("2_myi3d")
+script = ExtResource("2_utqwj")
 type = 1
 
 [node name="Weapons" type="Node3D" parent="."]
@@ -490,57 +436,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0774299)
 [node name="HandRight" type="Marker3D" parent="Weapons"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.079, -0.053)
-script = ExtResource("2_myi3d")
+script = ExtResource("2_utqwj")
 type = null
 
 [node name="carry" type="Marker3D" parent="Weapons/HandRight"]
-script = ExtResource("2_myi3d")
+script = ExtResource("2_utqwj")
 type = 2
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="Weapons/HandRight/carry"]
-script = ExtResource("6_t123e")
+script = ExtResource("3_nhgfc")
 
 [node name="HandLeft" type="Marker3D" parent="Weapons"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.079, -0.053)
-script = ExtResource("2_myi3d")
+script = ExtResource("2_utqwj")
 type = null
 
 [node name="carry" type="Marker3D" parent="Weapons/HandLeft"]
 unique_name_in_owner = true
-script = ExtResource("2_myi3d")
+script = ExtResource("2_utqwj")
 type = 2
 
 [node name="RemoteTransform3D2" type="RemoteTransform3D" parent="Weapons/HandLeft/carry"]
-script = ExtResource("6_t123e")
-
-[node name="Controller" type="Node" parent="."]
-script = ExtResource("4_i2tw0")
-
-[node name="PlayerInput" type="MultiplayerSynchronizer" parent="Controller"]
-root_path = NodePath(".")
-replication_config = SubResource("SceneReplicationConfig_ias7w")
-script = ExtResource("4_40ji2")
+script = ExtResource("3_nhgfc")
 
 [node name="ShadowDecal" type="Decal" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.497122, 0.247246)
 size = Vector3(0.9, 0.2, 0.5)
 texture_albedo = SubResource("GradientTexture2D_rseym")
-
-[node name="PlayerColor" type="Decal" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.497122, 0.235504)
-size = Vector3(1.3, 0.2, 1.1)
-texture_albedo = SubResource("GradientTexture2D_shmhc")
-emission_energy = 0.0
-modulate = Color(1, 0, 0.137255, 1)
-albedo_mix = 0.2
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.793929, 0)
-light_color = Color(1, 0.839216, 0.635294, 1)
-light_energy = 5.0
-omni_range = 20.0
-omni_attenuation = 0.63728
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "idle"
@@ -549,20 +472,11 @@ libraries = {
 "": SubResource("AnimationLibrary_nb41i")
 }
 
-[node name="HitMeter" type="CanvasLayer" parent="."]
-script = ExtResource("6_neqh6")
-
-[node name="ColorRect" type="ColorRect" parent="HitMeter"]
-material = SubResource("ShaderMaterial_m8fu2")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 1, 1, 0.486275)
-
 [node name="HitCooldown" type="Timer" parent="."]
 one_shot = true
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("4_6s6fg")
 
 [connection signal="child_entered_tree" from="Weapons/HandRight" to="Weapons/HandRight/carry/RemoteTransform3D" method="_child_entered_tree"]
 [connection signal="child_entered_tree" from="Weapons/HandLeft" to="Weapons/HandLeft/carry/RemoteTransform3D2" method="_child_entered_tree"]

@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://capac2gpahgq6"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://entities/player/abilities/ability.gd" id="1_y17th"]
+[ext_resource type="Script" path="res://entities/abilities/ability.gd" id="1_y17th"]
 [ext_resource type="Texture2D" uid="uid://dhh567kelu3tt" path="res://assets/characters/player/skelly/body_0.png" id="2_pdryj"]
 
 [node name="body_of_normality" type="Node3D"]
