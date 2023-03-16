@@ -69,6 +69,7 @@ func _ready() -> void:
 	%HealthLabel.text = str(health)
 
 	scale = Vector3.ONE * size
+	%Head.scale = Vector3.ONE / lerp(1.0, size, 0.8)
 	
 	for e in equips:
 		equip(e.instantiate())
