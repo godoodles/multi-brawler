@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bejnes3t0322"]
+[gd_scene load_steps=13 format=3 uid="uid://dcc0wc5n7hftc"]
 
 [ext_resource type="Script" path="res://entities/enemies/enemy.gd" id="1_6c6ml"]
 [ext_resource type="Script" path="res://entities/slot.gd" id="2_3f11s"]

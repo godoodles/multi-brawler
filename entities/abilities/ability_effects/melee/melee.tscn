@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dfh3ifdgltw38"]
 
 [ext_resource type="Script" path="res://entities/abilities/ability_effects/melee/ability_effect_melee.gd" id="1_iyigw"]
 

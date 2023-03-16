@@ -192,7 +192,7 @@ adjustment_color_correction = SubResource("GradientTexture1D_ne12u")
 script = ExtResource("1_cup00")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://entities/player/player.tscn", "res://entities/drops/drop.tscn")
+_spawnable_scenes = PackedStringArray("res://entities/player/player.tscn", "res://entities/enemies/kevin/kevin.tscn", "res://entities/abilities/ability_effects/melee/melee.tscn", "res://entities/drops/drop.tscn", "res://entities/enemies/frank.tscn")
 spawn_path = NodePath("../Entities")
 
 [node name="ShadowMapGenerator" type="SubViewport" parent="."]
@@ -280,7 +280,7 @@ transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 
 script = ExtResource("6_rjwvm")
 
 [node name="Camera3D" type="Camera3D" parent="Scene/Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 120)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
 current = true
 fov = 8.0
 

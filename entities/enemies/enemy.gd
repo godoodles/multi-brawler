@@ -67,18 +67,12 @@ func _ready() -> void:
 	if is_player and id == multiplayer.get_unique_id():
 		$PlayerColor.hide()
 	%HealthLabel.text = str(health)
-	
+
 	scale = Vector3.ONE * size
 	
 	for e in equips:
 		equip(e.instantiate())
-#	equip(preload("res://entities/abilities/punch.tscn").instantiate())
-#	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
-#	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
-#	equip(preload("res://entities/abilities/legs/fast_legs.tscn").instantiate())
-#	equip(preload("res://entities/abilities/legs/fast_legs.tscn").instantiate())
-#	equip(preload("res://entities/abilities/heads/head_of_heads.tscn").instantiate())
-#	equip(preload("res://entities/abilities/bodies/body_of_normality.tscn").instantiate())
+
 
 func equip(ability) -> void:
 	ability.player = self

@@ -55,10 +55,6 @@ func spawn_wave(amount:=100):
 		spawn_mob()
 		await get_tree().create_timer(0.3).timeout
 
-func get_random_player_target() -> Player:
-	var all_players : Array = get_tree().get_nodes_in_group("players")
-	return all_players[randi()%all_players.size()]
-
 
 # We don't need the rpc part when we have things in the Multiplayer Spawner.
 func spawn_mob(_enemy_scene:= EnemyTypeKevin, _spawn_pos:Vector3 = Vector3(randf_range(-20, 20), 0.0, randf_range(-20, 20))):
@@ -68,7 +64,8 @@ func spawn_mob(_enemy_scene:= EnemyTypeKevin, _spawn_pos:Vector3 = Vector3(randf
 	mob.effect.connect(_effect.bind())
 	mob.died.connect(self._mob_died.bind(mob))
 	entities.add_child(mob, true)
-	mob.controller.target = get_random_player_target()
+	var all_players : Array = get_tree().get_nodes_in_group("players")
+	mob.controller.set_target.rpc(randi() % all_players.size())
 
 func _effect(effect) -> void:
 	entities.add_child(effect, true)
