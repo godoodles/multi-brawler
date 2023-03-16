@@ -1,0 +1,16 @@
+[gd_scene load_steps=7 format=3 uid="uid://bs5fe330deg6h"]
+
+[ext_resource type="PackedScene" uid="uid://bejnes3t0322" path="res://entities/enemies/enemy.tscn" id="1_11c3m"]
+[ext_resource type="PackedScene" uid="uid://db2tryf51s0fj" path="res://entities/abilities/punch.tscn" id="2_vjtin"]
+[ext_resource type="PackedScene" path="res://entities/abilities/hands/hand_of_normality.tscn" id="3_o6s7h"]
+[ext_resource type="PackedScene" path="res://entities/abilities/legs/fast_legs.tscn" id="4_mqac7"]
+[ext_resource type="PackedScene" path="res://entities/abilities/heads/head_of_heads.tscn" id="5_t5sns"]
+[ext_resource type="PackedScene" path="res://entities/abilities/bodies/body_of_normality.tscn" id="6_snjb7"]
+
+[node name="Enemy" instance=ExtResource("1_11c3m")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 0, 0, 0)
+max_health = 4
+attack_speed = 0
+attack_range = 0
+movement_speed = 3.0
+equips = Array[PackedScene]([ExtResource("2_vjtin"), ExtResource("3_o6s7h"), ExtResource("3_o6s7h"), ExtResource("4_mqac7"), ExtResource("4_mqac7"), ExtResource("5_t5sns"), ExtResource("6_snjb7")])

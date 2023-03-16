@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://db2tryf51s0fj"]
 
 [ext_resource type="Script" path="res://entities/abilities/ability_attack.gd" id="1_6w5mu"]
 [ext_resource type="PackedScene" path="res://entities/abilities/ability_effects/melee/melee.tscn" id="2_gwynx"]

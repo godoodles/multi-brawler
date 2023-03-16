@@ -62,6 +62,7 @@ func _ready() -> void:
 	%HealthLabel.text = str(health)
 
 	equip(preload("res://entities/abilities/slash.tscn").instantiate())
+	equip(preload("res://entities/abilities/slash.tscn").instantiate())
 	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
 	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
 	equip(preload("res://entities/abilities/legs/fast_legs.tscn").instantiate())

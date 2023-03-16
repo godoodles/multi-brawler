@@ -2,6 +2,7 @@ extends Node3D
 
 const EnemySpawner := preload("res://game/systems/enemy_fog_spawner.tscn")
 const EnemyTypeKevin := preload("res://entities/enemies/kevin/kevin.tscn")
+const EnemyTypeFrank := preload("res://entities/enemies/frank.tscn")
 
 @export_node_path("ShadowManager") var shadow_manager_path
 @export_node_path("Node3D") var entities_path
@@ -31,7 +32,16 @@ func shadow_respawn(map_cord_key:Vector2, real_pos:Vector2):
 		return
 	var new_spawner = EnemySpawner.instantiate()
 	new_spawner.position = Vector3(real_pos.x, 0.0, real_pos.y+0.5)
-	new_spawner.enemy_scene = EnemyTypeKevin
+	
+	var enemy_scene
+	var size := 1.0
+	if randf() < 0.2:
+		enemy_scene = EnemyTypeFrank
+		size = 1.5
+	else:
+		enemy_scene = EnemyTypeKevin
+	new_spawner.enemy_scene = enemy_scene
+	new_spawner.size = size
 	new_spawner.spawn_enemy.connect(triggered_spawnpoint)
 	add_child(new_spawner, true)
 

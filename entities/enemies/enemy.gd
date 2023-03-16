@@ -2,8 +2,8 @@ class_name Character
 extends CharacterBody3D
 
 @export var is_player := false
-@export var health = 10
-@export var max_health = 10
+@export var max_health = 1
+@onready var health = max_health
 @export var attack_speed:int = 1
 @export var attack_range:int = 1
 
@@ -22,6 +22,9 @@ var hit_tween
 
 signal effect
 signal died
+
+@export var equips: Array[PackedScene] = []
+#@export var equips: Array = []
 
 @export var id := 1 :
 	set(value):
@@ -63,14 +66,16 @@ func _ready() -> void:
 	if is_player and id == multiplayer.get_unique_id():
 		$PlayerColor.hide()
 	%HealthLabel.text = str(health)
-
-	equip(preload("res://entities/abilities/punch.tscn").instantiate())
-	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
-	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
-	equip(preload("res://entities/abilities/legs/fast_legs.tscn").instantiate())
-	equip(preload("res://entities/abilities/legs/fast_legs.tscn").instantiate())
-	equip(preload("res://entities/abilities/heads/head_of_heads.tscn").instantiate())
-	equip(preload("res://entities/abilities/bodies/body_of_normality.tscn").instantiate())
+	
+	for e in equips:
+		equip(e.instantiate())
+#	equip(preload("res://entities/abilities/punch.tscn").instantiate())
+#	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
+#	equip(preload("res://entities/abilities/hands/hand_of_normality.tscn").instantiate())
+#	equip(preload("res://entities/abilities/legs/fast_legs.tscn").instantiate())
+#	equip(preload("res://entities/abilities/legs/fast_legs.tscn").instantiate())
+#	equip(preload("res://entities/abilities/heads/head_of_heads.tscn").instantiate())
+#	equip(preload("res://entities/abilities/bodies/body_of_normality.tscn").instantiate())
 
 func equip(ability) -> void:
 	ability.player = self
