@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://cee1kceibp5uj"]
+
+[ext_resource type="Texture2D" uid="uid://dhh567kelu3tt" path="res://assets/characters/player/skelly/body_0.png" id="1_hjpbe"]
+[ext_resource type="Script" path="res://entities/alter/candle.gd" id="2_d5fm2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g5qkt"]
+resource_local_to_scene = true
+transparency = 1
+blend_mode = 1
+depth_draw_mode = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 0)
+
+[sub_resource type="SphereMesh" id="SphereMesh_8qg35"]
+radius = 0.15
+height = 0.3
+radial_segments = 8
+rings = 4
+
+[node name="candle" type="Sprite3D"]
+transform = Transform3D(0.2, 0, 0, 0, 0.4, 0, 0, 0, 0.2, 0.0558278, 0.76077, 0)
+modulate = Color(0.133333, 0.133333, 0.133333, 1)
+texture = ExtResource("1_hjpbe")
+script = ExtResource("2_d5fm2")
+
+[node name="Effect" type="Node3D" parent="."]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -0.486058, 0.760886, 0)
+
+[node name="GlowBall" type="MeshInstance3D" parent="Effect"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.2, 0, 0)
+material_override = SubResource("StandardMaterial3D_g5qkt")
+mesh = SubResource("SphereMesh_8qg35")
+skeleton = NodePath("../..")

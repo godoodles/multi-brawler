@@ -1,0 +1,91 @@
+[gd_scene load_steps=11 format=3 uid="uid://tdxx3g65qadd"]
+
+[ext_resource type="Texture2D" uid="uid://dhh567kelu3tt" path="res://assets/characters/player/skelly/body_0.png" id="1_6m11g"]
+[ext_resource type="Script" path="res://entities/alter/alter.gd" id="1_aiddf"]
+[ext_resource type="Script" path="res://game/systems/enemy_spawn_trigger.gd" id="2_p7bmr"]
+[ext_resource type="PackedScene" uid="uid://cee1kceibp5uj" path="res://entities/alter/candle.tscn" id="3_jyn7c"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_124rx"]
+radius = 3.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0n3fo"]
+resource_local_to_scene = true
+radius = 16.0
+
+[sub_resource type="Gradient" id="Gradient_2mpow"]
+offsets = PackedFloat32Array(0.971386, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_d8nwq"]
+gradient = SubResource("Gradient_2mpow")
+width = 1024
+height = 1024
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_eej7u"]
+offsets = PackedFloat32Array(0.950301, 0.968373, 0.983434, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_80ik6"]
+gradient = SubResource("Gradient_eej7u")
+width = 1024
+height = 1024
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="alter" type="Node3D" groups=["alters"]]
+script = ExtResource("1_aiddf")
+capture_radius = 12.0
+
+[node name="ActivationArea" type="Area3D" parent="."]
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ActivationArea"]
+shape = SubResource("SphereShape3D_124rx")
+
+[node name="CaptureArea" type="Area3D" parent="."]
+collision_layer = 4
+monitoring = false
+monitorable = false
+script = ExtResource("2_p7bmr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CaptureArea"]
+shape = SubResource("SphereShape3D_0n3fo")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+modulate = Color(0.133333, 0.133333, 0.133333, 1)
+texture = ExtResource("1_6m11g")
+
+[node name="Candles" type="Node3D" parent="Sprite3D"]
+
+[node name="candle" parent="Sprite3D/Candles" instance=ExtResource("3_jyn7c")]
+
+[node name="candle2" parent="Sprite3D/Candles" instance=ExtResource("3_jyn7c")]
+transform = Transform3D(0.2, 0, 0, 0, 0.4, 0, 0, 0, 0.2, -0.146925, 0.76077, 0)
+
+[node name="candle3" parent="Sprite3D/Candles" instance=ExtResource("3_jyn7c")]
+transform = Transform3D(0.2, 0, 0, 0, 0.4, 0, 0, 0, 0.2, 0.329837, 0.76077, 0)
+
+[node name="CaptureProgress" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.499, 0)
+size = Vector3(0.001, 1, 0.001)
+texture_albedo = SubResource("GradientTexture2D_d8nwq")
+emission_energy = 0.0
+modulate = Color(0.921569, 0.133333, 0.607843, 1)
+albedo_mix = 0.2
+
+[node name="Ring" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.499, 0)
+size = Vector3(8, 1, 8)
+texture_albedo = SubResource("GradientTexture2D_80ik6")
+emission_energy = 0.0
+modulate = Color(0.921569, 0.133333, 0.607843, 1)
+albedo_mix = 0.2
+
+[connection signal="body_entered" from="ActivationArea" to="." method="_activation_entered"]
+[connection signal="body_entered" from="CaptureArea" to="." method="_capture_entered"]
+[connection signal="body_exited" from="CaptureArea" to="." method="_capture_exited"]

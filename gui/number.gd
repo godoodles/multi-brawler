@@ -7,11 +7,12 @@ signal done
 @export var color := Color.WHITE
 @export var hang_time := 0.0
 
-static func popin(node:Node3D, text, color:Color = Color.WHITE) -> ImpactText:
+static func popin(node:Node3D, text, color:Color = Color.WHITE, hang_time := 0.0) -> ImpactText:
 	var n = preload("res://gui/number.tscn").instantiate()
 	n.position = node.position
 	n.text = str(text)
 	n.color = color
+	n.hang_time = hang_time
 	node.get_parent().add_child(n)
 	return n
 

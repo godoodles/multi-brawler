@@ -5,7 +5,7 @@ extends CharacterBody3D
 @export var max_health = 10
 @export var attack_speed:int = 1
 @export var attack_range:int = 1
-
+@export var color := Color.RED
 @export var slots :Array[NodePath] = []
 
 @onready var controller: Controller = $Controller
@@ -19,6 +19,7 @@ var movement_decel := 30.0
 var last_direction := Vector2()
 
 signal effect
+signal died
 
 @export var id := 1 :
 	set(value):
@@ -71,8 +72,7 @@ func _ready() -> void:
 	equip(preload("res://entities/abilities/bodies/body_of_normality.tscn").instantiate())
 
 	# Adds itself to the tracked objects for revealing the shadow
-	_e.emit_signal("shadow_add_dynamic_revealer", self)
-
+	_e.shadow_add_dynamic_revealer.emit(self, 8.0)
 
 func equip(ability) -> void:
 	ability.player = self
@@ -118,7 +118,10 @@ func hit(from, _server_global_position:Vector3 = global_position):
 
 	health -= from.damage
 
-	ImpactText.popin(self, str(-from.damage), Color.RED).hang_time = 1.0
+	ImpactText.popin(self, str(-from.damage), Color.RED, 1.0)
 
 	if id == multiplayer.get_unique_id():
 		$HitMeter.hit()
+		
+	if health <= 0:
+		died.emit()

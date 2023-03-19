@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8o5k1bka1uyj"]
+
+[ext_resource type="Script" path="res://entities/abilities/ability_effects/projectile/ability_effect_area.gd" id="1_nhonc"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_71axe"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = false
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sxhuy"]
+radius = 22.0
+
+[node name="projectile" type="Node3D"]
+script = ExtResource("1_nhonc")
+area = 22.0
+timeout = 1.0
+knockback = 2.0
+damage = 100
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_71axe")
+
+[node name="Area" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape3D" parent="Area"]
+shape = SubResource("SphereShape3D_sxhuy")

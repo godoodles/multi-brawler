@@ -2,7 +2,7 @@ extends Area2D
 
 @export var tracker_radius := 8.0
 
-var tracked_entity : Player:
+var tracked_entity:
 	get:
 		return tracked_entity
 	set(value):

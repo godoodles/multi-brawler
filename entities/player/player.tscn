@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://dd0lc6renmvpw"]
+[gd_scene load_steps=25 format=3 uid="uid://dd0lc6renmvpw"]
 
 [ext_resource type="Script" path="res://entities/player/player.gd" id="1_ns80y"]
 [ext_resource type="Script" path="res://entities/slot.gd" id="2_myi3d"]
+[ext_resource type="Script" path="res://game/systems/enemy_spawn_trigger.gd" id="2_yyy07"]
 [ext_resource type="Script" path="res://entities/player/player_input.gd" id="4_40ji2"]
 [ext_resource type="Script" path="res://entities/player/player_controller.gd" id="4_i2tw0"]
 [ext_resource type="Shader" path="res://entities/player/hit.gdshader" id="6_7cuxx"]
@@ -40,12 +41,12 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
-[sub_resource type="Gradient" id="Gradient_2mpow"]
+[sub_resource type="Gradient" id="Gradient_qdg26"]
 offsets = PackedFloat32Array(0.68239, 0.874214, 1)
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_shmhc"]
-gradient = SubResource("Gradient_2mpow")
+gradient = SubResource("Gradient_qdg26")
 width = 128
 height = 128
 fill = 1
@@ -423,6 +424,8 @@ shader_parameter/curve = SubResource("CurveTexture_oub3i")
 
 [node name="Player" type="CharacterBody3D" groups=["players"]]
 script = ExtResource("1_ns80y")
+health = 1
+max_health = 1
 attack_speed = 0
 attack_range = 0
 slots = Array[NodePath]([NodePath("Weapons/HandRight"), NodePath("Weapons/HandRight/carry"), NodePath("Weapons/HandLeft"), NodePath("Weapons/HandLeft/carry"), NodePath("Body/LegRight"), NodePath("Body/LegLeft"), NodePath("Body/Body/Head"), NodePath("Body/Body")])
@@ -434,6 +437,7 @@ replication_config = SubResource("SceneReplicationConfig_yu6in")
 [node name="Trigger" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 0
+script = ExtResource("2_yyy07")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.231844)

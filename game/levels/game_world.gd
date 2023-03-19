@@ -1,13 +1,17 @@
 extends Node3D
 
-const PlayerScene		:= preload("res://entities/player/player.tscn")
+const PlayerScene := preload("res://entities/player/player.tscn")
 
 @onready var entities := $Entities
 
 func _ready():
 	if multiplayer.is_server():
 		setup_as_server()
-	
+		
+	for alter in get_tree().get_nodes_in_group("alters"):
+		alter.connect("capture_begin", _alter_capture_begin.bind(alter))
+		alter.connect("capture_end", _alter_capture_end.bind(alter))
+		alter.connect("effect", _effect)
 
 func setup_as_server():
 	print("Setting up map on server")
@@ -40,6 +44,7 @@ func add_player(id: int):
 	player.position = Vector3(randf_range(-5, 5), 0.0, randf_range(-5, 5))
 	player.name = str(id)
 	player.effect.connect(_effect.bind())
+	player.died.connect(_player_died.bind(player))
 	
 	entities.add_child(player, true)
 
@@ -50,6 +55,23 @@ func del_player(id: int):
 		return
 	entities.get_node(str(id)).queue_free()
 
-
 func _effect(effect) -> void:
 	entities.add_child(effect, true)
+
+func _player_died(player) -> void:
+	var alter = get_tree().get_first_node_in_group("alters")
+	if alter:
+		alter = alter.find_best_alter(player.position, player.color)
+		
+	if alter:
+		alter.extinguish_candle(player.color)
+		player.health = player.max_health
+		player.position = alter.position
+
+func _alter_capture_begin(alter:Alter) -> void:
+	if multiplayer.is_server():
+		$Spawners.spawn_wave(66)
+
+func _alter_capture_end(alter:Alter) -> void:
+	for player in get_tree().get_nodes_in_group("players"):
+		alter.light_candle(player.color)

@@ -11,4 +11,5 @@ signal game_connect
 signal game_connected
 
 # Game shadow mechanics
-signal shadow_add_dynamic_revealer(entity:Node)
+signal shadow_add_dynamic_revealer(entity:Node, radius:float)
+signal shadow_update_revealer(entity:Node, radius:float)
