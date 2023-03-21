@@ -15,14 +15,7 @@ func _ready() -> void:
 	timer.start(timeout)
 
 func apply(target:Node3D):
-	# sometimes multiplayer is null, sems like a bug, idk...
-	if not multiplayer:
-		return
-
-	if multiplayer.is_server():
-		target.hit.rpc(inst_to_dict(self), target.global_position)
-	else:
-		target.hit(self)
+	target.hit(self)
 
 func _timeout():
 	if multiplayer.is_server():

@@ -61,7 +61,6 @@ func spawn_mob(_enemy_scene:= EnemyTypeKevin, _spawn_pos:Vector3 = Vector3(randf
 	var mob = _enemy_scene.instantiate()
 	mob.position = _spawn_pos
 	mob.position.y = 0.5
-	mob.effect.connect(_effect.bind())
 	mob.died.connect(self._mob_died.bind(mob))
 	entities.add_child(mob, true)
 	var all_players : Array = get_tree().get_nodes_in_group("players")

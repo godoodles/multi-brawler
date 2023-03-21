@@ -193,7 +193,7 @@ adjustment_color_correction = SubResource("GradientTexture1D_ne12u")
 script = ExtResource("1_cup00")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://entities/player/player.tscn", "res://entities/enemies/kevin/kevin.tscn", "res://entities/abilities/ability_effects/melee/melee.tscn", "res://entities/drops/drop.tscn", "res://entities/enemies/frank.tscn", "res://entities/abilities/ability_effects/cleanse.tscn")
+_spawnable_scenes = PackedStringArray("res://entities/player/player.tscn", "res://entities/enemies/kevin/kevin.tscn", "res://entities/drops/drop.tscn", "res://entities/enemies/frank.tscn")
 spawn_path = NodePath("../Entities")
 
 [node name="ShadowMapGenerator" type="SubViewport" parent="."]
@@ -203,6 +203,7 @@ handle_input_locally = false
 gui_snap_controls_to_pixels = false
 size = Vector2i(256, 256)
 size_2d_override = Vector2i(256, 256)
+render_target_update_mode = 4
 
 [node name="ColorRect" type="ColorRect" parent="ShadowMapGenerator"]
 custom_minimum_size = Vector2(1024, 1024)
@@ -294,3 +295,5 @@ fov = 8.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_0jj7s")
+
+[connection signal="child_entered_tree" from="Entities" to="." method="_entities_child_entered_tree"]

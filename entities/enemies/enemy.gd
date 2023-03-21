@@ -118,7 +118,6 @@ func process_movement(delta, speed := -1.0, accel := -1.0, decel := -1.0):
 	var weight := accel if target_velocity_h.length() > 0.5 else decel
 	velocity_h = lerp(velocity_h, target_velocity_h, weight * delta)
 
-@rpc("call_local")
 func hit(from, server_global_position:Vector3 = global_position):
 	position = server_global_position
 	health -= from.damage
@@ -134,7 +133,7 @@ func flash(_duration := 0.1):
 func knock_back(force:Vector3) -> void:
 	if hit_tween:
 		hit_tween.kill()
-		
+
 	force.y = 0.0
 	
 	if health <= 0:
@@ -162,6 +161,9 @@ func knock_back(force:Vector3) -> void:
 		remove_from_group("mobs")
 		if multiplayer.is_server():
 			hit_tween.finished.connect(self.queue_free)
+
+	$Sync.replication_interval = 999
+	hit_tween.finished.connect($Sync.set.bind("replication_interval", 0))
 
 func set_process_and_slots_process(value:bool) -> void:
 	set_physics_process(value)

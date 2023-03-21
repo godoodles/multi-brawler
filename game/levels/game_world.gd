@@ -11,7 +11,6 @@ func _ready():
 	for alter in get_tree().get_nodes_in_group("alters"):
 		alter.connect("capture_begin", _alter_capture_begin.bind(alter))
 		alter.connect("capture_end", _alter_capture_end.bind(alter))
-		alter.connect("effect", _effect)
 
 func setup_as_server():
 	print("Setting up map on server")
@@ -31,7 +30,6 @@ func _exit_tree():
 	multiplayer.peer_connected.disconnect(add_player)
 	multiplayer.peer_disconnected.disconnect(del_player)
 
-
 func add_player(id: int):
 	if multiplayer.is_server():
 		print("Server:")
@@ -40,11 +38,9 @@ func add_player(id: int):
 	# Set player id.
 	player.id = id
 
-	# Randomize player position.
 	player.name = str(id)
-	player.effect.connect(_effect.bind())
 	player.died.connect(_player_died.bind(player))
-	
+
 	entities.add_child(player, true)
 
 
@@ -54,8 +50,8 @@ func del_player(id: int):
 		return
 	entities.get_node(str(id)).queue_free()
 
-func _effect(effect) -> void:
-	entities.add_child(effect, true)
+func _effect(effect:AbilityEffect) -> void:
+	entities.add_child(effect)
 
 func _player_died(player) -> void:
 	var alter = get_tree().get_first_node_in_group("alters")
@@ -74,3 +70,7 @@ func _alter_capture_begin(alter:Alter) -> void:
 func _alter_capture_end(alter:Alter) -> void:
 	for player in get_tree().get_nodes_in_group("players"):
 		alter.light_candle(player.color)
+
+func _entities_child_entered_tree(node):
+	if node.has_signal("effect"):
+		node.effect.connect(_effect)

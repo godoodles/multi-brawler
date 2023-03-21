@@ -15,7 +15,6 @@ extends CharacterBody3D
 var movement_accel := 20.0
 var movement_decel := 30.0
 
-
 var last_direction := Vector2()
 
 signal effect
@@ -88,10 +87,11 @@ func _physics_process(delta):
 	if controller_direction != Vector2.ZERO:
 		last_direction = controller_direction
 
-	process_movement(delta)
+	if id == multiplayer.get_unique_id():
+		process_movement(delta)
 	
-	# Gravity
-	velocity_v -= 30.0 * delta
+		# Gravity
+		velocity_v -= 30.0 * delta
 	
 	#if id == multiplayer.get_unique_id():
 	move_and_slide()
@@ -99,7 +99,7 @@ func _physics_process(delta):
 	control_animation()
 
 func control_animation():
-	var anim_play = "idle" if (velocity_h.length() <= 1.0 or controller.get_direction().length() < 0.1) else "run"
+	var anim_play = "idle" if velocity_h.length() <= 1.0 else "run"
 	if anim.current_animation != anim_play:
 		anim.play(anim_play)
 	if not is_zero_approx(velocity_h.x):
@@ -113,7 +113,6 @@ func process_movement(delta, speed := -1.0, accel := -1.0, decel := -1.0):
 	var weight := accel if target_velocity_h.length() > 0.5 else decel
 	velocity_h = lerp(velocity_h, target_velocity_h, weight * delta)
 
-@rpc("call_local")
 func hit(from, _server_global_position:Vector3 = global_position):
 	if hit_cooldown.time_left > 0:
 		return

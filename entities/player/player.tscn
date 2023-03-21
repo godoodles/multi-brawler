@@ -24,12 +24,9 @@ radius = 8.5
 radius = 3.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ias7w"]
-properties/0/path = NodePath(".:direction")
+properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/sync = true
-properties/1/path = NodePath("../..:position")
-properties/1/spawn = false
-properties/1/sync = true
 
 [sub_resource type="Gradient" id="Gradient_ii2rv"]
 offsets = PackedFloat32Array(0.824666, 1)
@@ -521,10 +518,11 @@ script = ExtResource("6_t123e")
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("4_i2tw0")
 
-[node name="PlayerInput" type="MultiplayerSynchronizer" parent="Controller"]
+[node name="PlayerInput" type="MultiplayerSynchronizer" parent="Controller" node_paths=PackedStringArray("body")]
 root_path = NodePath(".")
 replication_config = SubResource("SceneReplicationConfig_ias7w")
 script = ExtResource("4_40ji2")
+body = NodePath("../..")
 
 [node name="ShadowDecal" type="Decal" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.497122, 0.247246)
