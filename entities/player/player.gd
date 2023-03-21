@@ -58,6 +58,8 @@ var velocity_v: float:
 
 
 func _ready() -> void:
+	position = Vector3(randf_range(-5, 5), 0.0, randf_range(-5, 5))
+	
 	if id == multiplayer.get_unique_id():
 		$PlayerColor.hide()
 	%HealthLabel.text = str(health)
@@ -91,8 +93,8 @@ func _physics_process(delta):
 	# Gravity
 	velocity_v -= 30.0 * delta
 	
-	if id == multiplayer.get_unique_id():
-		move_and_slide()
+	#if id == multiplayer.get_unique_id():
+	move_and_slide()
 
 	control_animation()
 

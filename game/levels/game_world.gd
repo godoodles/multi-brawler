@@ -41,7 +41,6 @@ func add_player(id: int):
 	player.id = id
 
 	# Randomize player position.
-	player.position = Vector3(randf_range(-5, 5), 0.0, randf_range(-5, 5))
 	player.name = str(id)
 	player.effect.connect(_effect.bind())
 	player.died.connect(_player_died.bind(player))
