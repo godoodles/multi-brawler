@@ -10,12 +10,9 @@
 [ext_resource type="Script" path="res://entities/player/remote_transform_slot.gd" id="6_t123e"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yu6in"]
-properties/0/path = NodePath(".:position")
+properties/0/path = NodePath(".:id")
 properties/0/spawn = true
-properties/0/sync = true
-properties/1/path = NodePath(".:id")
-properties/1/spawn = true
-properties/1/sync = false
+properties/0/sync = false
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ii27p"]
 height = 3.0
@@ -28,8 +25,11 @@ radius = 3.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ias7w"]
 properties/0/path = NodePath(".:direction")
-properties/0/spawn = false
+properties/0/spawn = true
 properties/0/sync = true
+properties/1/path = NodePath("../..:position")
+properties/1/spawn = false
+properties/1/sync = true
 
 [sub_resource type="Gradient" id="Gradient_ii2rv"]
 offsets = PackedFloat32Array(0.824666, 1)

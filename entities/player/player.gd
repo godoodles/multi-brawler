@@ -91,7 +91,9 @@ func _physics_process(delta):
 	# Gravity
 	velocity_v -= 30.0 * delta
 	
-	move_and_slide()
+	if id == multiplayer.get_unique_id():
+		move_and_slide()
+
 	control_animation()
 
 func control_animation():
